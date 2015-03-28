@@ -1,0 +1,72 @@
+package com.lyk.imclient;
+
+import java.util.ArrayList;
+
+import com.lyk.imclient.ui.adapter.ViewPagerAdapter;
+import com.lyk.imclient.ui.fragment.ChatsFragment;
+import com.lyk.imclient.ui.fragment.CirclesFragment;
+import com.lyk.imclient.ui.fragment.ContactsFragment;
+import com.lyk.imclient.ui.tab.SlidingTabLayout;
+
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Toolbar;
+
+public class IMClientActivity extends FragmentActivity {
+	
+	private Toolbar mToolbar;
+
+	private SlidingTabLayout mSlidingTab;
+
+	private ViewPager mViewPager;
+
+	private ArrayList<Fragment> mFragments;
+
+	private ViewPagerAdapter mViewPagerAdapter;
+	
+	private OnClickListener mNavigationListener = new OnClickListener() {
+
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	};
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_im);
+        
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+		setActionBar(mToolbar);
+
+		String nickName = "Li Yikun";
+		String introduce= "fall in love with Microsoft OneNote";
+
+		getActionBar().setTitle(nickName);
+		mToolbar.setSubtitle(introduce);
+		mToolbar.setNavigationIcon(R.drawable.cat);
+		mToolbar.setNavigationOnClickListener(mNavigationListener);
+
+		mSlidingTab = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
+		mViewPager = (ViewPager) findViewById(R.id.viewpager);
+
+		mFragments = new ArrayList<Fragment>();
+		mFragments.add(new ChatsFragment());
+		mFragments.add(new ContactsFragment());
+		mFragments.add(new CirclesFragment());
+
+		mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), mFragments);
+		mViewPager.setOffscreenPageLimit(mFragments.size());
+		mViewPager.setAdapter(mViewPagerAdapter);
+
+		mSlidingTab.setViewPager(mViewPager);
+    }
+}
