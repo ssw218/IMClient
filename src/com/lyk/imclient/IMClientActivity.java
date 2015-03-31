@@ -7,6 +7,7 @@ import com.lyk.imclient.ui.fragment.ChatsFragment;
 import com.lyk.imclient.ui.fragment.CirclesFragment;
 import com.lyk.imclient.ui.fragment.ContactsFragment;
 import com.lyk.imclient.ui.tab.SlidingTabLayout;
+import com.lyk.imclient.util.IPManager;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -32,7 +33,7 @@ public class IMClientActivity extends FragmentActivity {
 
 		@Override
 		public void onClick(View v) {
-			// TODO Auto-generated method stub
+			new IPManager().getNetworkIP();
 			
 		}
 		
