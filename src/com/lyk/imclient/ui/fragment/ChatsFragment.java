@@ -20,7 +20,7 @@ public class ChatsFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		
-		View view = inflater.inflate(R.layout.tab_chats, container, false);
+		View view = inflater.inflate(R.layout.fragment_tab_chats, container, false);
 		mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler);
 	    mRecyclerView.setHasFixedSize(true);
 	    mLayoutManager = new LinearLayoutManager(getActivity());

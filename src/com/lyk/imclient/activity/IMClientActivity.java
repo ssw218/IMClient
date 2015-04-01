@@ -1,17 +1,21 @@
-package com.lyk.imclient;
+package com.lyk.imclient.activity;
 
 import java.util.ArrayList;
 
+import com.lyk.imclient.R;
 import com.lyk.imclient.ui.adapter.ViewPagerAdapter;
 import com.lyk.imclient.ui.fragment.ChatsFragment;
 import com.lyk.imclient.ui.fragment.CirclesFragment;
 import com.lyk.imclient.ui.fragment.ContactsFragment;
+import com.lyk.imclient.ui.fragment.LoginFragment;
 import com.lyk.imclient.ui.tab.SlidingTabLayout;
 import com.lyk.imclient.util.IPManager;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -44,6 +48,14 @@ public class IMClientActivity extends FragmentActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_im);
+        
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        // Login
+        if (true) {
+        	FragmentTransaction fTLogin = fragmentManager.beginTransaction();
+        	fTLogin.replace(android.R.id.content, LoginFragment.getInstance("", ""));
+        	fTLogin.commit();
+        }
         
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
 		setActionBar(mToolbar);
