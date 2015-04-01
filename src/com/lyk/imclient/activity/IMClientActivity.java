@@ -38,7 +38,6 @@ public class IMClientActivity extends FragmentActivity {
 		@Override
 		public void onClick(View v) {
 			new IPManager().getNetworkIP();
-			
 		}
 		
 	};
@@ -81,5 +80,16 @@ public class IMClientActivity extends FragmentActivity {
 		mViewPager.setAdapter(mViewPagerAdapter);
 
 		mSlidingTab.setViewPager(mViewPager);
+    }
+    
+    
+    //Called by LoginFragment
+    public void hideLoginFragment(Fragment fragment) {
+    	FragmentTransaction fTAnimation = getSupportFragmentManager().beginTransaction();
+    	fTAnimation.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+    	fTAnimation.commit();
+    	FragmentTransaction fTLogin = getSupportFragmentManager().beginTransaction();
+    	fTLogin.hide(fragment);
+    	fTLogin.commit();
     }
 }

@@ -2,15 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:background="#FFFFFF" >
 	
     <ImageView
         android:id="@+id/image_welcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="10dp"
         android:layout_gravity="center"
-        android:src="@drawable/welcome" />"
+        android:background="@drawable/welcome" />"
     
     <EditText
         android:id="@+id/input_user"
@@ -30,12 +32,14 @@
         android:id="@+id/button_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Login" />
+        android:textAllCaps="false"
+        android:text="LOGIN" />
     
     <Button
         android:id="@+id/button_register"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Register" />
+        android:textAllCaps="false"
+        android:text="REGISTER" />
     
 </LinearLayout>
