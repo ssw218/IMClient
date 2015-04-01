@@ -24,13 +24,9 @@ import android.widget.Toolbar;
 public class IMClientActivity extends FragmentActivity {
 	
 	private Toolbar mToolbar;
-
 	private SlidingTabLayout mSlidingTab;
-
 	private ViewPager mViewPager;
-
 	private ArrayList<Fragment> mFragments;
-
 	private ViewPagerAdapter mViewPagerAdapter;
 	
 	private OnClickListener mNavigationListener = new OnClickListener() {
@@ -56,7 +52,11 @@ public class IMClientActivity extends FragmentActivity {
         	fTLogin.commit();
         }
         
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        init();
+    }
+    
+    private void init() {
+    	mToolbar = (Toolbar) findViewById(R.id.toolbar);
 		setActionBar(mToolbar);
 
 		String nickName = "Li Yikun";

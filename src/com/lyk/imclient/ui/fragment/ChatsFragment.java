@@ -1,7 +1,10 @@
 package com.lyk.imclient.ui.fragment;
 
+import java.util.ArrayList;
+
 import com.lyk.imclient.R;
 import com.lyk.imclient.ui.adapter.RecyclerViewAdapter;
+import com.lyk.imclient.ui.view.ChatSimpleView;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,6 +18,7 @@ public class ChatsFragment extends Fragment {
 	private RecyclerView mRecyclerView;
 	private RecyclerView.Adapter mAdapter;
 	private RecyclerView.LayoutManager mLayoutManager;
+	private ArrayList<ChatSimpleView> mList;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -25,7 +29,21 @@ public class ChatsFragment extends Fragment {
 	    mRecyclerView.setHasFixedSize(true);
 	    mLayoutManager = new LinearLayoutManager(getActivity());
 	    mRecyclerView.setLayoutManager(mLayoutManager);
-	    mAdapter = new RecyclerViewAdapter(new String[]{"1", "2", "3", "4"});
+	    
+	    mList = new ArrayList<ChatSimpleView>();
+	    mList.add(new ChatSimpleView(getActivity()));
+	    mList.add(new ChatSimpleView(getActivity()));
+	    mList.add(new ChatSimpleView(getActivity()));
+	    mList.add(new ChatSimpleView(getActivity()));
+	    mList.add(new ChatSimpleView(getActivity()));
+	    mList.add(new ChatSimpleView(getActivity()));
+	    mList.add(new ChatSimpleView(getActivity()));
+	    mList.add(new ChatSimpleView(getActivity()));
+	    mList.add(new ChatSimpleView(getActivity()));
+	    mList.add(new ChatSimpleView(getActivity()));
+	    mList.add(new ChatSimpleView(getActivity()));
+	    mList.add(new ChatSimpleView(getActivity()));
+	    mAdapter = new RecyclerViewAdapter(mList);
 	    mRecyclerView.setAdapter(mAdapter);
 		
 		return view;
