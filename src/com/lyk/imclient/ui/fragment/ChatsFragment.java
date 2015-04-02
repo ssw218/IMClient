@@ -3,7 +3,7 @@ package com.lyk.imclient.ui.fragment;
 import java.util.ArrayList;
 
 import com.lyk.imclient.R;
-import com.lyk.imclient.ui.adapter.RecyclerViewAdapter;
+import com.lyk.imclient.ui.adapter.ChatsAdapter;
 import com.lyk.imclient.ui.view.ChatSimpleView;
 
 import android.os.Bundle;
@@ -43,7 +43,7 @@ public class ChatsFragment extends Fragment {
 	    mList.add(new ChatSimpleView(getActivity()));
 	    mList.add(new ChatSimpleView(getActivity()));
 	    mList.add(new ChatSimpleView(getActivity()));
-	    mAdapter = new RecyclerViewAdapter(mList);
+	    mAdapter = new ChatsAdapter(mList);
 	    mRecyclerView.setAdapter(mAdapter);
 		
 		return view;

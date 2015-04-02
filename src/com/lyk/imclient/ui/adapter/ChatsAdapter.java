@@ -8,7 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
+public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.ViewHolder> {
 	private ArrayList<ChatSimpleView> mList;
 	
 	public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -19,12 +19,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 		}
 	}
 	
-	public RecyclerViewAdapter(ArrayList<ChatSimpleView> list) {
+	public ChatsAdapter(ArrayList<ChatSimpleView> list) {
 		mList = list;
 	}
 	
 	@Override
-	public RecyclerViewAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+	public ChatsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 		ViewHolder vh = new ViewHolder(new ChatSimpleView(parent.getContext()));
 		return vh;
 	}

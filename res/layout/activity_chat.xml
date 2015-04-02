@@ -9,13 +9,26 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:background="#aaa" />
-    
-    <TextView
-        android:id="@+id/textview"
+
+    <LinearLayout
+        android:id="@+id/layout_chat"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/chat_back"
-        android:text="Welcome" />
+        android:orientation="vertical" >
+        
+        <TextView
+            android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:layout_marginTop="10dp"
+        	android:layout_marginBottom="5dp"
+        	android:layout_gravity="center"
+        	android:text="2015年4月2日，下午10：09" />
+
+        <include layout="@layout/chat_receive_view" />
+
+        <include layout="@layout/chat_send_view" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/button"

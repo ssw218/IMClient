@@ -5,10 +5,10 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.RelativeLayout;
 
-public class BubbleView extends RelativeLayout {
+public class BubbleReceiveView extends RelativeLayout {
 	private View mView;
 	
-	public BubbleView(Context context, AttributeSet attrs) {
+	public BubbleReceiveView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		
 	}

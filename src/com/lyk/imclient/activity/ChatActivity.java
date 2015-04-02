@@ -14,18 +14,16 @@ import android.widget.TextView;
 import android.widget.Toolbar;
 
 public class ChatActivity extends Activity {
-	
-private Button button;
-	
-	private TextView textView;
-	
+
+	private Button button;
+
 	private OnClickListener listener = new OnClickListener() {
 
 		@Override
 		public void onClick(View v) {
 			new IPManager().getNetworkIP();
 		}
-		
+
 	};
 
 	@Override
@@ -33,27 +31,27 @@ private Button button;
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_chat);
-		
+
 		Toolbar toolbar = (Toolbar) findViewById(R.id.chat_back);
 		setActionBar(toolbar);
 		getActionBar().setHomeButtonEnabled(true);
 		getActionBar().setDisplayShowHomeEnabled(true);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setTitle("Mao");
-		
+
 		button = (Button) findViewById(R.id.button);
 		button.setOnClickListener(listener);
-		textView = (TextView) findViewById(R.id.textview);
+		//textView = (TextView) findViewById(R.id.textview);
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case android.R.id.home: finish(); break;
-			default: break;
+		case android.R.id.home: finish(); break;
+		default: break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
 
-	
+
 }
