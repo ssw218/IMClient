@@ -5,6 +5,8 @@ import com.lyk.imclient.util.IPManager;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -44,4 +46,14 @@ private Button button;
 		textView = (TextView) findViewById(R.id.textview);
 	}
 
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case android.R.id.home: finish(); break;
+			default: break;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	
 }
