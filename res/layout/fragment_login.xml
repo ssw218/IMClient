@@ -6,7 +6,7 @@
     android:background="#FFFFFF" >
 	
     <ImageView
-        android:id="@+id/image_welcome"
+        android:id="@+id/fragment_login_image_welcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
@@ -15,28 +15,28 @@
         android:background="@drawable/welcome" />"
     
     <EditText
-        android:id="@+id/input_user"
+        android:id="@+id/fragment_login_edittext_user"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
         android:hint="Please input your username" />
     
     <EditText
-        android:id="@+id/input_password"
+        android:id="@+id/fragment_login_edittext_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:hint="Please input your username" />
     
     <Button
-        android:id="@+id/button_login"
+        android:id="@+id/fragment_login_button_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAllCaps="false"
         android:text="LOGIN" />
     
     <Button
-        android:id="@+id/button_register"
+        android:id="@+id/fragment_login_button_register"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAllCaps="false"

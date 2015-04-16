@@ -18,11 +18,10 @@
         android:background="#aaa" >
 
         <TextView
-            android:id="@+id/text_bubble_content"
+            android:id="@+id/text_chat_send_bubble_view_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:text="我也这么认为"
             android:textSize="14sp" />
     </FrameLayout>
 

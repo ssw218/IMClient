@@ -10,28 +10,15 @@
         android:layout_alignParentTop="true"
         android:background="#aaa" />
 
-    <LinearLayout
-        android:id="@+id/layout_chat"
+    <com.lyk.imclient.ui.view.ChatViewLayout
+        android:id="@+id/layout_activity_chat_chat"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/chat_back"
-        android:orientation="vertical" >
-        
-        <TextView
-            android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:layout_marginTop="10dp"
-        	android:layout_marginBottom="5dp"
-        	android:layout_gravity="center"
-        	android:text="2015年4月2日，下午10：09" />
-
-        <include layout="@layout/chat_receive_view" />
-
-        <include layout="@layout/chat_send_view" />
-    </LinearLayout>
+        android:orientation="vertical" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/button_activity_chat_send"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -39,12 +26,12 @@
         android:text="Enter" />
 
     <EditText
-        android:id="@+id/edittext"
+        android:id="@+id/edittext_activity_chat_send"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_toLeftOf="@id/button"
+        android:layout_toLeftOf="@id/button_activity_chat_send"
         android:text="Enter text" />
 
 </RelativeLayout>

@@ -5,7 +5,7 @@
     android:layout_height="wrap_content" >
     
     <ImageView
-        android:id="@+id/image_chat_send_photo"
+        android:id="@+id/image_chat_send_view_photo"
         android:layout_width="37dp"
         android:layout_height="37dp"
         android:layout_alignParentRight="true"
@@ -17,8 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginRight="5dp"
-        android:layout_toLeftOf="@id/image_chat_send_photo"
+        android:layout_toLeftOf="@id/image_chat_send_view_photo"
         layout="@layout/chat_send_bubble_view" />
     
-
 </RelativeLayout>
