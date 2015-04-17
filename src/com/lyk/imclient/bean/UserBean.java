@@ -39,5 +39,9 @@ public class UserBean {
 		this.mIp = ip;
 	}
 	
+	@Override
+	public String toString() {
+		return "username : " + mUserName + " password : " + mPassword + " ip : " + mIp;
+	}
 	
 }

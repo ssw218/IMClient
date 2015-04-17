@@ -19,6 +19,8 @@ public class IPManager {
 	
 	private static final String API = "http://www.ip138.com/ip2city.asp";
 	
+	private String mNetworkIP;
+	
 	public IPManager() {
 		
 	}
@@ -34,23 +36,29 @@ public class IPManager {
 		return ip;
 	}
 	
-	public String getNetworkIP(){
-		if (DEBUG) Log.e(TAG, "get network ip");
-		String ip = null;
+	public void initNetwork() {
 		IPAsyncTask task = new IPAsyncTask();
 		task.execute(API);
-		ip = task.getIP();
-		return ip;
+	}
+	
+	public String getNetworkIP(){
+		if (DEBUG) Log.e(TAG, "get network ip");
+		long time = System.currentTimeMillis();
+//		if (DEBUG) Log.e(TAG, "Network ip: " + mNetworkIP);
+//		while (mNetworkIP == null) {};
+//		System.out.println(System.currentTimeMillis() - time);
+		if (DEBUG) Log.e(TAG, "Network ip: " + mNetworkIP);
+		return mNetworkIP;
 	}
 	
 	class IPAsyncTask extends AsyncTask<String, String, StringBuilder> {
 		private static final String TAG = "IPAsyncTask";
 		private static final boolean DEBUG = false;
-		private String ip;
 		
 		@Override
 		protected StringBuilder doInBackground(String... api) {
 			if (DEBUG) Log.e(TAG, "doInBackground");
+			mNetworkIP = null;
 			StringBuilder webContent = new StringBuilder();
 			try {
 				URL url = new URL(API);
@@ -65,12 +73,10 @@ public class IPManager {
 				inputStreamReader.close();
 				inputStream.close();
 			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
+			} 
 			if (DEBUG) Log.e(TAG, "webContent : " + webContent);
 			return webContent;
 		}
@@ -83,8 +89,8 @@ public class IPManager {
 			if(start < 0 || end < 0) {
 				Log.e(TAG, "IPAsyncTask can't get network ip, please check the error");
 			} else {
-				ip = result.substring(start + 1, end);
-				Log.v(TAG, "IPAsyncTask get network IP : " + ip);
+				mNetworkIP = result.substring(start + 1, end);
+				Log.v(TAG, "IPAsyncTask get network IP : " + mNetworkIP);
 			}
 			super.onPostExecute(result);
 		}
@@ -92,10 +98,6 @@ public class IPManager {
 		@Override
 		protected void onCancelled(StringBuilder result) {
 			super.onCancelled(result);
-		}
-		
-		public String getIP() {
-			return ip;
 		}
 		
 	}

@@ -1,22 +1,36 @@
 package com.lyk.imclient.ui.fragment;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import com.lyk.imclient.R;
 import com.lyk.imclient.activity.IMClientActivity;
 import com.lyk.imclient.activity.RegisterActivity;
 import com.lyk.imclient.bean.UserBean;
 import com.lyk.imclient.util.IPManager;
+import com.lyk.imclient.util.ServerManager;
 
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class LoginFragment extends Fragment {
 	private static final String TAG = "LoginFragment";
@@ -29,15 +43,20 @@ public class LoginFragment extends Fragment {
 	private Button mRegisterButton;
 	private LoginAsyncTask mLoginTask;
 	
+	String ip;
+	IPManager ipManager = new IPManager();
+	
 	private OnClickListener mLoginListener = new OnClickListener() {
 
 		@Override
 		public void onClick(View v) {
-			if (mLoginTask.isCancelled()) {
+			if (DEBUG) Log.e(TAG, "Login task : " + mLoginTask.isCancelled());
+			if (!mLoginTask.isCancelled()) {
+				if (DEBUG) Log.e(TAG, "on login listener");
 				UserBean user = new UserBean();
 				user.setUser(mUserName.getText().toString());
 				user.setPassword(mPassword.getText().toString());
-				user.setIp(new IPManager().getNetworkIP());
+				user.setIp(ipManager.getNetworkIP());
 				mLoginTask.execute(user);
 			}
 		}
@@ -67,6 +86,7 @@ public class LoginFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mLoginTask = new LoginAsyncTask();
+		ipManager.initNetwork();
 	}
 
 	@Override
@@ -85,10 +105,56 @@ public class LoginFragment extends Fragment {
 	
 	class LoginAsyncTask extends AsyncTask<UserBean, Void, Boolean> {
 		private static final String TAG = "LoginAsyncTask";
+		private static final int TIME_OUT_MILLIS = 20000;
 		
 		@Override
 		protected Boolean doInBackground(UserBean... params) {
-			return null;
+			StringBuilder s = new StringBuilder("http://" + ServerManager.SERVER_IP + 
+					"/" + ServerManager.SERVER_NAME +
+					"/" + ServerManager.SERVLET_LOGIN + "?");
+			
+			if (DEBUG) Log.v(TAG, params[0].toString());
+			
+			s.append("username=" + params[0].getUser());
+			s.append("&password=" + params[0].getPassword());
+			s.append("&ip=" + params[0].getIp());
+			
+			URL url;
+			InputStream inputStream = null;
+			BufferedReader reader = null;
+			
+			try {
+				url = new URL(s.toString());
+				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+				conn.setRequestMethod("POST");
+				conn.setReadTimeout(TIME_OUT_MILLIS);
+//				OutputStream outputStream = conn.getOutputStream();
+//				BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream));
+				inputStream = conn.getInputStream();
+				reader = new BufferedReader(new InputStreamReader(inputStream));
+				Log.v(TAG, "response code : " + conn.getResponseCode() +
+						" response message : " + conn.getResponseMessage());
+				String result = reader.readLine();
+				if (DEBUG) Log.v(TAG, result);
+				if (result.equals("false"))
+					return false;
+				if (conn.getResponseCode() == 200)
+					return true;
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					inputStream.close();
+					reader.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				
+			}
+			
+			return false;
 		}
 
 		@Override
@@ -99,9 +165,12 @@ public class LoginFragment extends Fragment {
 		@Override
 		protected void onPostExecute(Boolean result) {
 			super.onPostExecute(result);
+			Log.e(TAG, "result: " + result);
 			if (result) {
 				IMClientActivity activity = (IMClientActivity) getActivity();
 				activity.hideLoginFragment(getFragment());
+			} else {
+				Toast.makeText(getActivity(), "’À∫≈ªÚ√‹¬Î¥ÌŒÛ£°", Toast.LENGTH_LONG);
 			}
 		}
 
