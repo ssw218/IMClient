@@ -7,23 +7,34 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.w3c.dom.Text;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+
 import com.lyk.imclient.R;
 import com.lyk.imclient.activity.IMClientActivity;
 import com.lyk.imclient.activity.RegisterActivity;
+import com.lyk.imclient.bean.BaseUserBean;
 import com.lyk.imclient.bean.UserBean;
 import com.lyk.imclient.util.IPManager;
 import com.lyk.imclient.util.ServerManager;
+import com.lyk.imclient.util.UserXmlParser;
 
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.AsyncTask.Status;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.InputFilter;
 import android.util.Log;
+import android.util.Xml;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -37,7 +48,7 @@ public class LoginFragment extends Fragment {
 	private static final boolean DEBUG = true;
 	
 	private View mView;
-	private EditText mUserName;
+	private EditText mId;
 	private EditText mPassword;
 	private Button mLoginButton;
 	private Button mRegisterButton;
@@ -50,11 +61,12 @@ public class LoginFragment extends Fragment {
 
 		@Override
 		public void onClick(View v) {
-			if (DEBUG) Log.e(TAG, "Login task : " + mLoginTask.isCancelled());
-			if (!mLoginTask.isCancelled()) {
+//			if (DEBUG) Log.e(TAG, "Login task : " + mLoginTask.isCancelled());
+			if (mLoginTask == null || mLoginTask.isCancelled() || mLoginTask.getStatus() == Status.FINISHED) {
+				mLoginTask = new LoginAsyncTask();
 				if (DEBUG) Log.e(TAG, "on login listener");
-				UserBean user = new UserBean();
-				user.setUser(mUserName.getText().toString());
+				BaseUserBean user = new BaseUserBean();
+				user.setId(mId.getText().toString());
 				user.setPassword(mPassword.getText().toString());
 				user.setIp(ipManager.getNetworkIP());
 				mLoginTask.execute(user);
@@ -85,7 +97,6 @@ public class LoginFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mLoginTask = new LoginAsyncTask();
 		ipManager.initNetwork();
 	}
 
@@ -98,24 +109,24 @@ public class LoginFragment extends Fragment {
 		mRegisterButton = (Button) mView.findViewById(R.id.fragment_login_button_register);
 		mLoginButton.setOnClickListener(mLoginListener);
 		mRegisterButton.setOnClickListener(mRegisterListener);
-		mUserName = (EditText) mView.findViewById(R.id.fragment_login_edittext_user);
+		mId = (EditText) mView.findViewById(R.id.fragment_login_edittext_user);
 		mPassword = (EditText) mView.findViewById(R.id.fragment_login_edittext_password);
 		return mView;
 	}
 	
-	class LoginAsyncTask extends AsyncTask<UserBean, Void, Boolean> {
+	class LoginAsyncTask extends AsyncTask<BaseUserBean, Void, Boolean> {
 		private static final String TAG = "LoginAsyncTask";
 		private static final int TIME_OUT_MILLIS = 20000;
 		
 		@Override
-		protected Boolean doInBackground(UserBean... params) {
+		protected Boolean doInBackground(BaseUserBean... params) {
 			StringBuilder s = new StringBuilder("http://" + ServerManager.SERVER_IP + 
 					"/" + ServerManager.SERVER_NAME +
 					"/" + ServerManager.SERVLET_LOGIN + "?");
 			
 			if (DEBUG) Log.v(TAG, params[0].toString());
 			
-			s.append("username=" + params[0].getUser());
+			s.append("id=" + params[0].getId());
 			s.append("&password=" + params[0].getPassword());
 			s.append("&ip=" + params[0].getIp());
 			
@@ -128,23 +139,39 @@ public class LoginFragment extends Fragment {
 				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 				conn.setRequestMethod("POST");
 				conn.setReadTimeout(TIME_OUT_MILLIS);
+				conn.setRequestProperty("Content-Type", "text/xml; charset=utf-8");
 //				OutputStream outputStream = conn.getOutputStream();
 //				BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream));
 				inputStream = conn.getInputStream();
 				reader = new BufferedReader(new InputStreamReader(inputStream));
 				Log.v(TAG, "response code : " + conn.getResponseCode() +
 						" response message : " + conn.getResponseMessage());
-				String result = reader.readLine();
-				if (DEBUG) Log.v(TAG, result);
-				if (result.equals("false"))
+				String result = null;
+				StringBuffer xml = new StringBuffer();
+				while ((result = reader.readLine()) != null) {
+					xml.append(result);
+				}
+				if (DEBUG) Log.v(TAG, "result: " + xml);
+				
+				if (result != null && result.equals("false"))
 					return false;
-				if (conn.getResponseCode() == 200)
+				
+				if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+					Message message = new Message();
+					message.what = IMClientActivity.UIHandler.MESSAGE_CONTACTS_SERVICE_START;
+					// xml parse
+					UserBean user = UserXmlParser.getUser(xml.toString());
+					if (DEBUG) Log.e(TAG, "user info : " + user);
+					message.obj = user;
+					((IMClientActivity) getActivity()).getUIHandler().sendMessage(message);
 					return true;
+				}
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
 			} finally {
+				if (DEBUG) Log.e(TAG, "finally");
 				try {
 					inputStream.close();
 					reader.close();

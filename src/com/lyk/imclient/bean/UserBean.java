@@ -1,47 +1,83 @@
 package com.lyk.imclient.bean;
 
-public class UserBean {
-	private String mUserName;
-	private String mPassword;
-	private String mIp;
+public class UserBean extends BaseUserBean {
+	private String mName;
+	private String mIntroduce;
+	private char mState;
+	private String mImageURL;
+	private String mImagePath;
+	private String mFriends;
+	private String mGroups;
 	
 	public UserBean() {
 
 	}
 	
-	public UserBean(String userName, String password, String ip) {
-		mUserName = userName;
-		mPassword = password;
-		mIp = ip;
+	public String getName() {
+		return mName;
 	}
 
-	public String getUser() {
-		return mUserName;
+	public void setName(String name) {
+		this.mName = name;
 	}
 
-	public void setUser(String userName) {
-		this.mUserName = userName;
+	public String getIntroduce() {
+		return mIntroduce;
 	}
 
-	public String getPassword() {
-		return mPassword;
+	public void setIntroduce(String introduce) {
+		this.mIntroduce = introduce;
 	}
 
-	public void setPassword(String password) {
-		this.mPassword = password;
+	public char getState() {
+		return mState;
 	}
 
-	public String getIp() {
-		return mIp;
+	public void setState(char state) {
+		this.mState = state;
 	}
 
-	public void setIp(String ip) {
-		this.mIp = ip;
+	public String getImageURL() {
+		return mImageURL;
+	}
+
+	public void setImageURL(String imageURL) {
+		this.mImageURL = imageURL;
+	}
+
+	public String getImagePath() {
+		return mImagePath;
+	}
+
+	public void setImagePath(String imagePath) {
+		this.mImagePath = imagePath;
+	}
+
+	public String getFriends() {
+		return mFriends;
+	}
+
+	public void setFriends(String friends) {
+		this.mFriends = friends;
+	}
+
+	public String getGroups() {
+		return mGroups;
+	}
+	
+	public void setGroups(String groups) {
+		this.mGroups = groups;
 	}
 	
 	@Override
 	public String toString() {
-		return "username : " + mUserName + " password : " + mPassword + " ip : " + mIp;
+		return "name : " + mName + 
+				" introduce : " + mIntroduce +
+				" state : " + mState + 
+				" image url : " + mImageURL +
+				" image path : " + mImagePath + 
+				" friends : " + mFriends + 
+				" groups : " + mGroups;
 	}
 	
 }
