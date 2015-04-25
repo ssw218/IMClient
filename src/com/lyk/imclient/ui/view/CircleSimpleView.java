@@ -7,7 +7,6 @@ public class CircleSimpleView extends View {
 
 	public CircleSimpleView(Context context) {
 		super(context);
-		// TODO Auto-generated constructor stub
 	}
 
 }

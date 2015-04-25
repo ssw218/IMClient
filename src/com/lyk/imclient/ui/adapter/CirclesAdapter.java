@@ -16,19 +16,16 @@ public class CirclesAdapter extends RecyclerView.Adapter<CirclesAdapter.ViewHold
 
 	@Override
 	public int getItemCount() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public void onBindViewHolder(ViewHolder arg0, int arg1) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public ViewHolder onCreateViewHolder(ViewGroup arg0, int arg1) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

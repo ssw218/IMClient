@@ -19,7 +19,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import com.lyk.imclient.R;
 import com.lyk.imclient.activity.IMClientActivity;
 import com.lyk.imclient.activity.RegisterActivity;
-import com.lyk.imclient.bean.BaseUserBean;
+import com.lyk.imclient.bean.HostUserBean;
 import com.lyk.imclient.bean.UserBean;
 import com.lyk.imclient.util.IPManager;
 import com.lyk.imclient.util.ServerManager;
@@ -65,7 +65,7 @@ public class LoginFragment extends Fragment {
 			if (mLoginTask == null || mLoginTask.isCancelled() || mLoginTask.getStatus() == Status.FINISHED) {
 				mLoginTask = new LoginAsyncTask();
 				if (DEBUG) Log.e(TAG, "on login listener");
-				BaseUserBean user = new BaseUserBean();
+				HostUserBean user = new HostUserBean();
 				user.setId(mId.getText().toString());
 				user.setPassword(mPassword.getText().toString());
 				user.setIp(ipManager.getNetworkIP());
@@ -114,12 +114,13 @@ public class LoginFragment extends Fragment {
 		return mView;
 	}
 	
-	class LoginAsyncTask extends AsyncTask<BaseUserBean, Void, Boolean> {
+	class LoginAsyncTask extends AsyncTask<HostUserBean, Void, Boolean> {
 		private static final String TAG = "LoginAsyncTask";
+		private static final boolean DEBUG = true;
 		private static final int TIME_OUT_MILLIS = 20000;
 		
 		@Override
-		protected Boolean doInBackground(BaseUserBean... params) {
+		protected Boolean doInBackground(HostUserBean... params) {
 			StringBuilder s = new StringBuilder("http://" + ServerManager.SERVER_IP + 
 					"/" + ServerManager.SERVER_NAME +
 					"/" + ServerManager.SERVLET_LOGIN + "?");
@@ -161,6 +162,7 @@ public class LoginFragment extends Fragment {
 					message.what = IMClientActivity.UIHandler.MESSAGE_CONTACTS_SERVICE_START;
 					// xml parse
 					UserBean user = UserXmlParser.getUser(xml.toString());
+					user.setId(params[0].getId());
 					if (DEBUG) Log.e(TAG, "user info : " + user);
 					message.obj = user;
 					((IMClientActivity) getActivity()).getUIHandler().sendMessage(message);

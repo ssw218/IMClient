@@ -18,7 +18,7 @@
         android:id="@+id/fragment_login_edittext_user"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text"
+        android:inputType="number"
         android:hint="Please input your username" />
     
     <EditText

@@ -8,7 +8,9 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import com.lyk.imclient.bean.FriendUserBean;
 import com.lyk.imclient.bean.UserBean;
+import com.lyk.imclient.factory.UserFactory;
 
 import android.util.Log;
 import android.util.Xml;
@@ -24,7 +26,7 @@ public class UserXmlParser {
 	private static final String TAG_INTRODUCE = "introduce";
 
 	public static UserBean getUser(String xml) {
-		UserBean user = new UserBean();
+		UserBean user = UserFactory.createUser();
 		XmlPullParserFactory xmlFactory = null;
 		XmlPullParser parser = null;
 		StringReader reader = new StringReader(xml);
@@ -64,5 +66,38 @@ public class UserXmlParser {
 		}
 
 		return user;
+	}
+	
+	public static FriendUserBean getFriend(String xml) {
+		FriendUserBean friend = UserFactory.createFriend();
+		XmlPullParserFactory xmlFactory = null;
+		XmlPullParser parser = null;
+		StringReader reader = new StringReader(xml);
+		try {
+			xmlFactory = XmlPullParserFactory.newInstance();
+			parser = xmlFactory.newPullParser();
+			parser.setInput(reader);
+			int eventType = parser.getEventType();
+			String name = null;
+			while (eventType != XmlPullParser.END_DOCUMENT) {
+				if (eventType == XmlPullParser.START_TAG) {
+					name = parser.getName();
+				} else if (eventType == XmlPullParser.TEXT) {
+					if (name.equals(TAG_NAME)) {
+						friend.setName(parser.getText());
+					} else if (name.equals(TAG_PHOTO)) {
+						friend.setImageURL(parser.getText());
+					} else if (name.equals(TAG_INTRODUCE)) {
+						friend.setIntroduce(parser.getText());
+					}
+				}
+				eventType = parser.next();
+			}
+		} catch (XmlPullParserException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return friend;
 	}
 }
