@@ -16,7 +16,7 @@ import android.util.Log;
 
 public class SDCardManager {
 	private static final String TAG = "SDCardManager";
-	private static final boolean DEBUG = true;
+	private static final boolean DEBUG = false;
 
 	private static final String FILE_FATHER = "IMClient";
 
@@ -79,6 +79,13 @@ public class SDCardManager {
 		return f.exists();
 	}
 
+	public Bitmap getBitmap(String file, String name) {
+		Bitmap bitmap = null;
+		if (exists(file, name))
+			bitmap = BitmapFactory.decodeFile(getImagePath(file, name));
+		return  bitmap;
+	}
+	
 	public void saveImage(byte[] imageByte, String file, String name) {
 		Bitmap image = BitmapFactory.decodeByteArray(imageByte, 0,
 				imageByte.length);

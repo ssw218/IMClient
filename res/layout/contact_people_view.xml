@@ -23,15 +23,17 @@
         android:layout_toRightOf="@id/contact_people_photo"
         android:orientation="vertical" >
         <TextView
+            android:id="@+id/contact_people_textview_name"
             android:layout_width="wrap_content"
         	android:layout_height="wrap_content"
         	android:text="Mao" />
         
         <TextView
+            android:id="@+id/contact_people_textview_introduce"
             android:layout_width="wrap_content"
         	android:layout_height="wrap_content"
         	android:text="[online]I am a cat" />
-        "
+        
     </LinearLayout>
 
 </RelativeLayout>

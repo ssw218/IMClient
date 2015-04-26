@@ -47,6 +47,10 @@ public class IMClientActivity extends FragmentActivity {
 	private ArrayList<Fragment> mFragments;
 	private ViewPagerAdapter mViewPagerAdapter;
 	
+	private ContactsFragment mContactsFragment;
+	private CirclesFragment mCirclesFragment;
+	private ChatsFragment mChatsFragment;
+	
 	private UIHandler mUIHandler;
 	
 	private OnClickListener mNavigationListener = new OnClickListener() {
@@ -122,10 +126,14 @@ public class IMClientActivity extends FragmentActivity {
 		mSlidingTab = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
 		mViewPager = (ViewPager) findViewById(R.id.viewpager);
 
+		mChatsFragment =  new ChatsFragment();
+		mContactsFragment = new ContactsFragment();
+		mCirclesFragment = new CirclesFragment();
+		
 		mFragments = new ArrayList<Fragment>();
-		mFragments.add(new ChatsFragment());
-		mFragments.add(new ContactsFragment());
-		mFragments.add(new CirclesFragment());
+		mFragments.add(mChatsFragment);
+		mFragments.add(mContactsFragment);
+		mFragments.add(mCirclesFragment);
 
 		mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), mFragments);
 		mViewPager.setOffscreenPageLimit(mFragments.size());
@@ -167,12 +175,17 @@ public class IMClientActivity extends FragmentActivity {
     }
     
     public class UIHandler extends Handler {
+    	private static final String TAG = "UIHandler";
+    	private static final boolean DEBUG = false;
+    	
 		public static final int MESSAGE_CHATS_FRAGMENT_UPDATE = 1; 
 		public static final int MESSAGE_CONTACTS_FRAGMENT_UPDATE = 2;
 		public static final int MESSAGE_CIRCLES_FRAGMENT_UPDATE = 3;
 		public static final int MESSAGE_CONTACTS_SERVICE_START = 4;
 		public static final int MESSAGE_CHATS_SERVICE_START = 5;
 		public static final int MESSAGE_USER_PHOTO_UPDATE = 6;
+		public static final int MESSAGE_FRAGMENT_CONTACTS_UPDATE_INFO = 7;
+		public static final int MESSAGE_FRAGMENT_CONTACTS_UPDATE_PHOTO = 8;
 		
 		public UIHandler(Looper looper) {
 			super(looper);
@@ -205,6 +218,13 @@ public class IMClientActivity extends FragmentActivity {
 					Message message = new Message();
 					message.what = MESSAGE_CHATS_SERVICE_START;
 					sendMessage(message);
+					
+					for (String next: user.getFriends().split(",")) {
+						Message message2 = new Message();
+						message2.what = ContactsFragment.FragmentHandler.MESSAGE_ADD_FRIEND;
+						message2.obj = next;
+						mContactsFragment.getHandler().sendMessage(message2);
+					}
 					break; }
 				case MESSAGE_CHATS_SERVICE_START : {
 					Intent intent = new Intent(IMClientActivity.this, ChatsService.class);
@@ -214,6 +234,16 @@ public class IMClientActivity extends FragmentActivity {
 					// id and photo name
 					String[] m = (String[]) msg.obj;
 					updatePhoto(m[0], m[1]);
+					break; }
+				case MESSAGE_FRAGMENT_CONTACTS_UPDATE_INFO : {
+					Message message = Message.obtain(msg);
+					message.what = ContactsFragment.FragmentHandler.MESSAGE_UPDATE_FRIEND;
+					mContactsFragment.getHandler().sendMessage(message);
+					break; }
+				case MESSAGE_FRAGMENT_CONTACTS_UPDATE_PHOTO : {
+					Message message = Message.obtain(msg);
+					message.what = ContactsFragment.FragmentHandler.MESSAGE_UPDATE_PHOTO;
+					mContactsFragment.getHandler().sendMessage(message);
 					break; }
 			}
 		}

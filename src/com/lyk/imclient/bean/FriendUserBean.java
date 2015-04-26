@@ -37,4 +37,13 @@ public class FriendUserBean extends BaseUserBean {
 	public void setImagePath(String imagePath) {
 		this.mImagePath = imagePath;
 	}
+	
+	@Override
+	public String toString() {
+		return "name : " + getName() + 
+				" introduce : " + getIntroduce() +
+				" state : " + getState() + 
+				" image url : " + getImageURL() +
+				" image path : " + getImagePath();
+	}
 }

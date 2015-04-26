@@ -30,7 +30,7 @@ public class UserBean extends FriendUserBean {
 				" introduce : " + getIntroduce() +
 				" state : " + getState() + 
 				" image url : " + getImageURL() +
-				" image path : " + etmImagePath() + 
+				" image path : " + getImagePath() + 
 				" friends : " + mFriends + 
 				" groups : " + mGroups;
 	}

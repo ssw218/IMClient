@@ -27,6 +27,7 @@ import android.os.AsyncTask.Status;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.Parcel;
@@ -37,7 +38,7 @@ import android.util.Log;
 
 public class ContactsService extends Service {
 	private static final String TAG = "ContanctsService";
-	private static final boolean DEBUG = true;
+	private static final boolean DEBUG = false;
 
 	public static final String NAME_PHOTO = "photo";
 	public static final String NAME_FRIENDS = "friends";
@@ -49,7 +50,6 @@ public class ContactsService extends Service {
 	private String mImageURL;
 	private String[] mFriends;
 	private String[] mGroups;
-	private Rect mRect;
 
 	private Messenger mMessengerReceiver;
 	private Messenger mMessengerSend;
@@ -95,7 +95,6 @@ public class ContactsService extends Service {
 		mImageURL = intent.getStringExtra(NAME_PHOTO);
 		mFriends = intent.getStringExtra(NAME_FRIENDS).split(",");
 		mGroups = intent.getStringExtra(NAME_GROUPS).split(",");
-		mRect = intent.getParcelableExtra(NAME_PHOTO);
 		
 		if (DEBUG)
 			Log.e(TAG, "image url : " + mImageURL + " friends : " + mFriends
@@ -108,7 +107,8 @@ public class ContactsService extends Service {
 //			imageTask.execute(mId, mImageURL);
 			Message message = new Message();
 			message.what = ServiceHandler.MESSAGE_UPDATE_PHOTO;
-			message.obj = mImageURL;
+			String[] params = new String[] {mId, mImageURL};
+			message.obj = params;
 			mHandler.sendMessage(message);
 		} else {
 			if (DEBUG)
@@ -152,12 +152,12 @@ public class ContactsService extends Service {
 			if (DEBUG)
 				Log.e(TAG, "ServiceHandler " + msg.what);
 			switch (msg.what) {
-			case MESSAGE_SEND_MESSENGER:
+			case MESSAGE_SEND_MESSENGER: {
 				mMessengerSend = msg.replyTo;
 				if (DEBUG)
 					Log.e(TAG, "Messenger " + mMessengerSend);
-				break;
-			case MESSAGE_UPDATE_IMAGE_SEND_DELAY:
+				break; }
+			case MESSAGE_UPDATE_IMAGE_SEND_DELAY: {
 				Message message = Message.obtain(msg);
 				message.what = IMClientActivity.UIHandler.MESSAGE_USER_PHOTO_UPDATE;
 				try {
@@ -165,8 +165,8 @@ public class ContactsService extends Service {
 				} catch (RemoteException e) {
 					e.printStackTrace();
 				}
-				break;
-			case MESSAGE_UPDATE_FIRNED_INFO:
+				break; }
+			case MESSAGE_UPDATE_FIRNED_INFO: {
 				String id = (String) msg.obj;
 				if (mFriendsUpdateTaskMap.containsKey(id)) {
 					if (mFriendsUpdateTaskMap.get(id).getStatus().equals(Status.FINISHED)) {
@@ -180,22 +180,23 @@ public class ContactsService extends Service {
 					task.execute(id);
 					mFriendsUpdateTaskMap.put(id, task);
 				}
-				break;
-			case MESSAGE_UPDATE_PHOTO :
-				String imageURL = (String) msg.obj;
+				break; }
+			case MESSAGE_UPDATE_PHOTO : {
+				String id = ((String[]) msg.obj)[0];
+				String imageURL = ((String[]) msg.obj)[1];
 				if (mImageDownloadTaskMap.containsKey(imageURL)) {
 					if (mImageDownloadTaskMap.get(imageURL).getStatus().equals(Status.FINISHED)) {
 						mImageDownloadTaskMap.remove(imageURL);
 						ImageDownloadTask task = new ImageDownloadTask();
-						task.execute(imageURL);
+						task.execute(id, imageURL);
 						mImageDownloadTaskMap.put(imageURL, task);
 					}
 				} else {
 					ImageDownloadTask task = new ImageDownloadTask();
-					task.execute(imageURL);
+					task.execute(id, imageURL);
 					mImageDownloadTaskMap.put(imageURL, task);
 				}
-				break;
+				break; }
 			case MESSAGE_UPDATT_SQL_USER:
 				break;
 			case MESSAGE_UPDATT_SQL_FRIENDS:
@@ -234,6 +235,7 @@ public class ContactsService extends Service {
 				friend = UserXmlParser.getUser(xml.toString());
 				friend.setId(id);
 				friend.setImagePath(friend.getImageURL());
+				Log.v(TAG, "friend info : " + friend);
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -262,12 +264,33 @@ public class ContactsService extends Service {
 			message1.obj = result;
 			mHandler.sendMessage(message1);
 			
+			// download image
 			SDCardManager sdcard = new SDCardManager(result.getId());
 			if (!sdcard.exists(SDCardManager.FILE_PHOTO, result.getImagePath())) {
 				Message message2 = new Message();
 				message2.what = ServiceHandler.MESSAGE_UPDATE_PHOTO;
-				message2.obj = result.getImageURL();
+				String[] params = new String[]{result.getId(), result.getImageURL()};
+				message2.obj = params;
 				mHandler.sendMessage(message2);
+			} else {
+				Message message2 = new Message();
+				message2.what = IMClientActivity.UIHandler.MESSAGE_FRAGMENT_CONTACTS_UPDATE_PHOTO;
+				message2.obj = result;
+				try {
+					mMessengerSend.send(message2);
+				} catch (RemoteException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			// update info
+			Message message3 = new Message();
+			message3.what = IMClientActivity.UIHandler.MESSAGE_FRAGMENT_CONTACTS_UPDATE_INFO;
+			message3.obj = result;
+			try {
+				mMessengerSend.send(message3);
+			} catch (RemoteException e) {
+				e.printStackTrace();
 			}
 		}
 
@@ -361,8 +384,17 @@ public class ContactsService extends Service {
 				Log.e(TAG, "onPostExecute");
 			// send message to activity to update UI
 			Message message = new Message();
-			message.what = IMClientActivity.UIHandler.MESSAGE_USER_PHOTO_UPDATE;
-			message.obj = result;
+			if (result[0].equals(mId)) {
+				message.what = IMClientActivity.UIHandler.MESSAGE_USER_PHOTO_UPDATE;
+				message.obj = result;
+			} else {
+				message.what = IMClientActivity.UIHandler.MESSAGE_FRAGMENT_CONTACTS_UPDATE_PHOTO;
+				FriendUserBean user = new FriendUserBean();
+				user.setId(result[0]);
+				user.setImagePath(result[1]);
+				message.obj = user;
+			}
+			
 			try {
 				mMessengerSend.send(message);
 			} catch (RemoteException e) {

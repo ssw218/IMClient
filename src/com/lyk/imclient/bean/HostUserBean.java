@@ -27,7 +27,7 @@ public class HostUserBean extends BaseUserBean {
 	
 	@Override
 	public String toString() {
-		return "id : " + mId + " password : " + mPassword + " ip : " + mIp;
+		return "id : " + getId() + " password : " + mPassword + " ip : " + mIp;
 	}
 	
 }

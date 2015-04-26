@@ -7,12 +7,29 @@
     <TextView
         android:layout_width="match_parent"
     	android:layout_height="wrap_content"
+    	android:layout_marginLeft="5dp"
+    	android:layout_marginTop="10dp"
     	android:text="Friends" />
-    <include
-        layout="@layout/contact_people_view" />
-    <include
-        layout="@layout/contact_people_view" />
-    <include
-        layout="@layout/contact_people_view" />
+    <!-- contact_people_view -->
+    <LinearLayout
+        android:id="@+id/fragment_tab_contacts_friends_layout"
+        android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:orientation="vertical" >
+		      
+    </LinearLayout>
+    
+    <TextView
+        android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:layout_marginLeft="5dp"
+    	android:text="Groups" />
+    <LinearLayout
+        android:id="@+id/fragment_tab_contacts_groups_layout"
+        android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:orientation="vertical" >
+		      
+    </LinearLayout>
 
 </LinearLayout>
