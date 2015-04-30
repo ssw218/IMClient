@@ -101,7 +101,7 @@ public class ContactsService extends Service {
 					+ " groups : " + mGroups);
 
 		// find image
-		SDCardManager sdcard = new SDCardManager(mId);
+		SDCardManager sdcard = new SDCardManager();
 		if (!sdcard.exists(SDCardManager.FILE_PHOTO, mImageURL)) {
 //			ImageDownloadTask imageTask = new ImageDownloadTask();
 //			imageTask.execute(mId, mImageURL);
@@ -265,7 +265,7 @@ public class ContactsService extends Service {
 			mHandler.sendMessage(message1);
 			
 			// download image
-			SDCardManager sdcard = new SDCardManager(result.getId());
+			SDCardManager sdcard = new SDCardManager();
 			if (!sdcard.exists(SDCardManager.FILE_PHOTO, result.getImagePath())) {
 				Message message2 = new Message();
 				message2.what = ServiceHandler.MESSAGE_UPDATE_PHOTO;
@@ -356,7 +356,7 @@ public class ContactsService extends Service {
 				}
 				if (DEBUG)
 					Log.e(TAG, "length: " + imageByte.length);
-				SDCardManager sdcard = new SDCardManager(id);
+				SDCardManager sdcard = new SDCardManager();
 				sdcard.saveImage(imageByte, SDCardManager.FILE_PHOTO, name);
 
 			} catch (MalformedURLException e) {

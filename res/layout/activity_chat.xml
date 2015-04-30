@@ -10,28 +10,60 @@
         android:layout_alignParentTop="true"
         android:background="#aaa" />
 
-    <com.lyk.imclient.ui.view.ChatViewLayout
-        android:id="@+id/layout_activity_chat_chat"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview_activity_chat_chat"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/chat_back"
-        android:orientation="vertical" />
+        android:scrollbars="horizontal" />
 
-    <Button
-        android:id="@+id/button_activity_chat_send"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:text="Enter" />
-
-    <EditText
-        android:id="@+id/edittext_activity_chat_send"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_toLeftOf="@id/button_activity_chat_send"
-        android:text="Enter text" />
+        android:orientation="vertical"
+        android:background="#22AAAAAA" >
+"
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp" >
+
+            <ImageButton
+                android:id="@+id/imagebutton_activity_chat_voice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:background="@drawable/ic_mic" />
+            
+            <ImageButton
+                android:id="@+id/imagebutton_activity_chat_change"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/ic_add" />
+            
+            <ImageButton
+                android:id="@+id/imagebutton_activity_chat_emoji"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@id/imagebutton_activity_chat_change"
+                android:background="@drawable/ic_keyboard_alt" />
+
+            <EditText
+                android:id="@+id/edittext_activity_chat_send"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@id/imagebutton_activity_chat_emoji"
+                android:layout_toRightOf="@id/imagebutton_activity_chat_voice"
+                android:hint="Enter text" />
+        </RelativeLayout>
+		<fragment
+		    android:name="com.lyk.imclient.ui.fragment.PanelFragment"
+		    android:id="@+id/fragemnt_activity_chat_panel"
+		    android:layout_width="match_parent"
+    		android:layout_height="wrap_content" />
+    </LinearLayout>
 
 </RelativeLayout>

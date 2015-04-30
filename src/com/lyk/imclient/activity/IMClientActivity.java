@@ -111,7 +111,7 @@ public class IMClientActivity extends FragmentActivity {
     }
     
     private void init() {
-    	mToolbar = (Toolbar) findViewById(R.id.toolbar);
+    	mToolbar = (Toolbar) findViewById(R.id.toolbar_activity_im_head);
 		setActionBar(mToolbar);
 
 //		String nickName = "Li Yikun";
@@ -123,8 +123,8 @@ public class IMClientActivity extends FragmentActivity {
 		
 		mToolbar.setNavigationOnClickListener(mNavigationListener);
 
-		mSlidingTab = (SlidingTabLayout) findViewById(R.id.sliding_tabs);
-		mViewPager = (ViewPager) findViewById(R.id.viewpager);
+		mSlidingTab = (SlidingTabLayout) findViewById(R.id.slidingtablayout_activity_im_sliding_tabs);
+		mViewPager = (ViewPager) findViewById(R.id.viewpager_activity_im_content);
 
 		mChatsFragment =  new ChatsFragment();
 		mContactsFragment = new ContactsFragment();
@@ -154,7 +154,7 @@ public class IMClientActivity extends FragmentActivity {
     
     private void updatePhoto (String id, String name) {
     	if (DEBUG) Log.e(TAG, "updatePhoto : " + id + " " + name);
-    	SDCardManager sdcard = new SDCardManager(id);
+    	SDCardManager sdcard = new SDCardManager();
     	Drawable drawable = sdcard.getImageFromSDCard(SDCardManager.FILE_PHOTO, name, 
     			mToolbar.getNavigationIcon().getBounds(), getResources());
     	mToolbar.setNavigationIcon(drawable);

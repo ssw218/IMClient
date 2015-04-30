@@ -50,9 +50,9 @@ public class ContactsFragment extends Fragment {
 		
 		scrollView.addView(view, p);
 		mFriendsLayout = (LinearLayout) view
-				.findViewById(R.id.fragment_tab_contacts_friends_layout);
+				.findViewById(R.id.linearlayout_fragment_tab_contacts_friends);
 		mGroupsLayout = (LinearLayout) view
-				.findViewById(R.id.fragment_tab_contacts_groups_layout);
+				.findViewById(R.id.linearlayout_fragment_tab_contacts_groups);
 		mFriendViews = new ArrayList<ContactView>();
 		mHandler = new FragmentHandler();
 		return scrollView;
@@ -113,7 +113,7 @@ public class ContactsFragment extends Fragment {
 			case MESSAGE_UPDATE_PHOTO : {
 				String id = ((FriendUserBean) msg.obj).getId();
 				String name = ((FriendUserBean) msg.obj).getImageURL();
-				SDCardManager sdcard = new SDCardManager(id);
+				SDCardManager sdcard = new SDCardManager();
 				for (ContactView next : mFriendViews) {
 					if (next.getFriendId().equals(id)) {
 						next.setImageSrc(sdcard.getBitmap(SDCardManager.FILE_PHOTO, name));
@@ -137,11 +137,11 @@ public class ContactsFragment extends Fragment {
 			mId = id;
 			mView = LayoutInflater.from(context).inflate(
 					R.layout.contact_people_view, null);
-			mPhoto = (ImageView) mView.findViewById(R.id.contact_people_photo);
+			mPhoto = (ImageView) mView.findViewById(R.id.imageview_contact_people_view_photo);
 			mName = (TextView) mView
-					.findViewById(R.id.contact_people_textview_name);
+					.findViewById(R.id.textview_contact_people_view_name);
 			mIntroduce = (TextView) mView
-					.findViewById(R.id.contact_people_textview_introduce);
+					.findViewById(R.id.textview_contact_people_view_introduce);
 			LayoutParams p = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 			p.topMargin = 10;
 			p.bottomMargin = 10;

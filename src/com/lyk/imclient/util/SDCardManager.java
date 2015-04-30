@@ -20,19 +20,20 @@ public class SDCardManager {
 
 	private static final String FILE_FATHER = "IMClient";
 
+	public static final String FILE_LOGIN = "login";
 	public static final String FILE_PHOTO = "photo";
 	public static final String FILE_PICTURE = "picture";
 	public static final String FILE_THUMB = "thumb";
 	public static final String FILE_IMAGE = "image";
 
 	private String mPath;
-	private String mId;
+//	private String mId;
 
-	public SDCardManager(String id) {
+	public SDCardManager() {
 		mPath = Environment.getExternalStorageDirectory() + "/" + FILE_FATHER;
 		if (DEBUG)
 			Log.v(TAG, "sdcard path : " + mPath);
-		mId = id;
+//		mId = id;
 		File directory = new File(mPath);
 		if (DEBUG)
 			Log.v(TAG, "exists : " + directory.exists());
@@ -45,21 +46,24 @@ public class SDCardManager {
 		}
 		if (DEBUG)
 			Log.v(TAG, "exists : " + directory.exists());
-		File db = new File(mPath + "/" + mId);
-		if (!db.exists())
-			db.mkdir();
+//		File db = new File(mPath + "/" + mId);
+//		if (!db.exists())
+//			db.mkdirs();
+		File login = new File(mPath + "/" + FILE_LOGIN);
+		if (!login.exists())
+			login.mkdirs();
 		File photo = new File(mPath + "/" + FILE_PHOTO);
 		if (!photo.exists())
-			photo.mkdir();
+			photo.mkdirs();
 		File picture = new File(mPath + "/" + FILE_PICTURE);
 		if (!picture.exists())
-			picture.mkdir();
+			picture.mkdirs();
 		File thumb = new File(mPath + "/" + FILE_THUMB);
 		if (!thumb.exists())
-			thumb.mkdir();
+			thumb.mkdirs();
 		File image = new File(mPath + "/" + FILE_IMAGE);
 		if (!image.exists())
-			image.mkdir();
+			image.mkdirs();
 
 	}
 
@@ -69,6 +73,10 @@ public class SDCardManager {
 		Drawable drawable = new BitmapDrawable(resources, bitmap);
 		return drawable;
 	}
+	
+//	public String getDatabaseParentPath() {
+//		return mPath + "/" + mId;
+//	}
 
 	private String getImagePath(String file, String name) {
 		return mPath + "/" + file + "/" + name;

@@ -13,9 +13,9 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 public class IPManager {
-	
 	private static final String TAG = "IPManager";
 	private static final boolean DEBUG = true;
+	private static final boolean NET = true;
 	
 	private static final String API = "http://www.ip138.com/ip2city.asp";
 	
@@ -36,18 +36,24 @@ public class IPManager {
 	}
 	
 	public void initNetwork() {
-		IPAsyncTask task = new IPAsyncTask();
-		task.execute(API);
+		if (NET) { 
+			IPAsyncTask task = new IPAsyncTask();
+			task.execute(API);
+		}
 	}
 	
 	public String getNetworkIP(){
 		if (DEBUG) Log.e(TAG, "get network ip");
-		long time = System.currentTimeMillis();
-//		if (DEBUG) Log.e(TAG, "Network ip: " + mNetworkIP);
-//		while (mNetworkIP == null) {};
-//		System.out.println(System.currentTimeMillis() - time);
-		if (DEBUG) Log.e(TAG, "Network ip: " + mNetworkIP);
-		return mNetworkIP;
+		if (NET) {
+			long time = System.currentTimeMillis();
+//			if (DEBUG) Log.e(TAG, "Network ip: " + mNetworkIP);
+//			while (mNetworkIP == null) {};
+//			System.out.println(System.currentTimeMillis() - time);
+			if (DEBUG) Log.e(TAG, "Network ip: " + mNetworkIP);
+			return mNetworkIP;
+		} else {
+			return getHostIP();
+		}
 	}
 	
 	class IPAsyncTask extends AsyncTask<String, String, StringBuilder> {

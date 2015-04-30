@@ -105,12 +105,12 @@ public class LoginFragment extends Fragment {
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 		mView = inflater.inflate(R.layout.fragment_login, container, false);
-		mLoginButton = (Button) mView.findViewById(R.id.fragment_login_button_login);
-		mRegisterButton = (Button) mView.findViewById(R.id.fragment_login_button_register);
+		mLoginButton = (Button) mView.findViewById(R.id.button_fragment_login_login);
+		mRegisterButton = (Button) mView.findViewById(R.id.button_fragment_login_register);
 		mLoginButton.setOnClickListener(mLoginListener);
 		mRegisterButton.setOnClickListener(mRegisterListener);
-		mId = (EditText) mView.findViewById(R.id.fragment_login_edittext_user);
-		mPassword = (EditText) mView.findViewById(R.id.fragment_login_edittext_password);
+		mId = (EditText) mView.findViewById(R.id.edittext_fragment_login_user);
+		mPassword = (EditText) mView.findViewById(R.id.edittext_fragment_login_password);
 		return mView;
 	}
 	

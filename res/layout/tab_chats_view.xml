@@ -10,7 +10,7 @@
         android:layout_margin="10dp" >
 
         <ImageView
-            android:id="@+id/image_photo"
+            android:id="@+id/imageview_tab_chats_view_photo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
-            android:layout_toRightOf="@id/image_photo"
+            android:layout_toRightOf="@id/imageview_tab_chats_view_photo"
             android:orientation="vertical" >
 
             <RelativeLayout
@@ -30,14 +30,14 @@
                 android:layout_height="match_parent" >
 
                 <TextView
-                    android:id="@+id/text_chat_name"
+                    android:id="@+id/textview_tab_chats_view_chat_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:text="Li Yikun" />
 
                 <TextView
-                    android:id="@+id/text_chat_time"
+                    android:id="@+id/textview_tab_chats_view_chat_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -49,14 +49,14 @@
                 android:layout_height="match_parent" >
 
                 <TextView
-                    android:id="@+id/text_chat_content"
+                    android:id="@+id/textview_tab_chats_view_chat_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:text="Hi! Welcome to the IM." />
 
                 <TextView
-                    android:id="@+id/text_chat_number"
+                    android:id="@+id/textview_tab_chats_view_chat_number"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"

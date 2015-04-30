@@ -29,14 +29,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.RegisterActivity" >
-        </activity>
-        <activity android:name=".activity.ChatActivity" >
-        </activity>
-
-        <service android:name=".service.ContactsService" >
-        </service>
-
+        <activity android:name=".activity.RegisterActivity" />
+        <activity 
+            android:name=".activity.ChatActivity"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />        
+        <service android:name=".service.ContactsService" />
+		<service android:name=".service.ChatsService" />
+		<provider android:name=".provider.IMProvider"
+		    android:authorities="com.lyk.imclient"
+		    android:exported="false" >
+		    <grant-uri-permission android:pathPattern=".*" />
+		</provider>
         
     </application>
 

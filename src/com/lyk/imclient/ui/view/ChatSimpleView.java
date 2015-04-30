@@ -38,11 +38,11 @@ public class ChatSimpleView extends FrameLayout {
 		mContext = context;
 		mView = LayoutInflater.from(context).inflate(R.layout.tab_chats_view, null);
 		mView.setOnClickListener(openChatListener);
-		mPoto = (ImageView) mView.findViewById(R.id.image_photo);
-		mName = (TextView) mView.findViewById(R.id.text_chat_name);
-		mTime = (TextView) mView.findViewById(R.id.text_chat_time);
-		mContent = (TextView) mView.findViewById(R.id.text_chat_content);
-		mNumber = (TextView) mView.findViewById(R.id.text_chat_number);
+		mPoto = (ImageView) mView.findViewById(R.id.imageview_tab_chats_view_photo);
+		mName = (TextView) mView.findViewById(R.id.textview_tab_chats_view_chat_name);
+		mTime = (TextView) mView.findViewById(R.id.textview_tab_chats_view_chat_time);
+		mContent = (TextView) mView.findViewById(R.id.textview_tab_chats_view_chat_content);
+		mNumber = (TextView) mView.findViewById(R.id.textview_tab_chats_view_chat_number);
 //		LayoutParams layoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
 //		setBackgroundColor(0xFFFFFF);
 		addView(mView);

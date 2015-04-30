@@ -24,7 +24,7 @@ public class ChatViewLayout extends LinearLayout {
 		TextView time = new TimeTextView(mContext, new Time("GMT+8"));
 		addView(time);
 		View sendView = LayoutInflater.from(mContext).inflate(R.layout.chat_send_bubble_view, null);
-		TextView sendText = (TextView) sendView.findViewById(R.id.text_chat_send_bubble_view_content);
+		TextView sendText = (TextView) sendView.findViewById(R.id.textview_chat_send_bubble_view_content);
 		sendText.setText(text);
 		addView(sendView);
 	}

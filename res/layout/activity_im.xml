@@ -5,22 +5,22 @@
     tools:context="${relativePackage}.${activityClass}" >
 
     <Toolbar
-        android:id="@+id/toolbar"
+        android:id="@+id/toolbar_activity_im_head"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#aaa" />
 	
     <com.lyk.imclient.ui.tab.SlidingTabLayout
-        android:id="@+id/sliding_tabs"
+        android:id="@+id/slidingtablayout_activity_im_sliding_tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar"
+        android:layout_below="@id/toolbar_activity_im_head"
         android:background="#aaa" />
     
     <android.support.v4.view.ViewPager
-        android:id="@+id/viewpager"
+        android:id="@+id/viewpager_activity_im_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/sliding_tabs" />
+        android:layout_below="@id/slidingtablayout_activity_im_sliding_tabs" />
     
 </RelativeLayout>

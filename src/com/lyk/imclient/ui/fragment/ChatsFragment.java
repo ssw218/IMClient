@@ -25,23 +25,12 @@ public class ChatsFragment extends Fragment {
 			Bundle savedInstanceState) {
 		
 		View view = inflater.inflate(R.layout.fragment_tab_chats, container, false);
-		mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler);
+		mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerview_fragment_tab_chats_chat);
 	    mRecyclerView.setHasFixedSize(true);
 	    mLayoutManager = new LinearLayoutManager(getActivity());
 	    mRecyclerView.setLayoutManager(mLayoutManager);
 	    
 	    mList = new ArrayList<ChatSimpleView>();
-	    mList.add(new ChatSimpleView(getActivity()));
-	    mList.add(new ChatSimpleView(getActivity()));
-	    mList.add(new ChatSimpleView(getActivity()));
-	    mList.add(new ChatSimpleView(getActivity()));
-	    mList.add(new ChatSimpleView(getActivity()));
-	    mList.add(new ChatSimpleView(getActivity()));
-	    mList.add(new ChatSimpleView(getActivity()));
-	    mList.add(new ChatSimpleView(getActivity()));
-	    mList.add(new ChatSimpleView(getActivity()));
-	    mList.add(new ChatSimpleView(getActivity()));
-	    mList.add(new ChatSimpleView(getActivity()));
 	    mList.add(new ChatSimpleView(getActivity()));
 	    mAdapter = new ChatsAdapter(mList);
 	    mRecyclerView.setAdapter(mAdapter);
