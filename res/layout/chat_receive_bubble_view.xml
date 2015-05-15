@@ -10,20 +10,31 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true" />
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@id/arrow_left"
+        android:orientation="horizontal"
+        android:padding="10dp"
         android:background="#aaa" >
 
         <TextView
             android:id="@+id/textview_chat_send_bubble_view_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
             android:text="猫咪真可爱"
             android:textSize="14sp" />
-    </FrameLayout>
+        
+        <TextView
+            android:id="@+id/textview_chat_send_bubble_view_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:textSize="12sp"
+            android:textColor="#FFFFFFFF"
+            android:text="11''" />
+        
+    </LinearLayout>
 
 </RelativeLayout>

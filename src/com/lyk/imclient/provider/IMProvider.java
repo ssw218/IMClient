@@ -1,6 +1,6 @@
 package com.lyk.imclient.provider;
 
-import com.lyk.imclient.db.DataBaseHelper;
+import com.lyk.imclient.db.DatabaseHelper;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -17,7 +17,7 @@ public class IMProvider extends ContentProvider {
 
 	@Override
 	public boolean onCreate() {
-		DataBaseHelper helper = new DataBaseHelper(getContext());
+		DatabaseHelper helper = DatabaseHelper.getInstance(getContext());
 		return true;
 	}
 

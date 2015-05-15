@@ -25,6 +25,7 @@ public class SDCardManager {
 	public static final String FILE_PICTURE = "picture";
 	public static final String FILE_THUMB = "thumb";
 	public static final String FILE_IMAGE = "image";
+	public static final String FILE_AUDIO = "audio";
 
 	private String mPath;
 //	private String mId;
@@ -64,9 +65,15 @@ public class SDCardManager {
 		File image = new File(mPath + "/" + FILE_IMAGE);
 		if (!image.exists())
 			image.mkdirs();
-
+		File audio = new File(mPath + "/" + FILE_AUDIO);
+		if (!audio.exists())
+			audio.mkdirs();
 	}
-
+	
+	public String getFilePath(String file) {
+		return mPath + "/" + file;
+	}
+	
 	public Drawable getImageFromSDCard(String file, String name, Rect rect, Resources resources) {
 		Bitmap bitmap = BitmapFactory.decodeFile(getImagePath(file, name));
 		bitmap = Bitmap.createScaledBitmap(bitmap, rect.width(), rect.height(), true);

@@ -21,14 +21,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:orientation="vertical"
-        android:background="#22AAAAAA" >
-"
+        android:orientation="vertical" >
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp" >
+            android:layout_marginTop="10dp"
+            android:background="#22AAAAAA" >
 
             <ImageButton
                 android:id="@+id/imagebutton_activity_chat_voice"
@@ -62,6 +61,11 @@
 		<fragment
 		    android:name="com.lyk.imclient.ui.fragment.PanelFragment"
 		    android:id="@+id/fragemnt_activity_chat_panel"
+		    android:layout_width="match_parent"
+    		android:layout_height="wrap_content" />
+		<fragment
+		    android:name="com.lyk.imclient.ui.fragment.RecordFragment"
+		    android:id="@+id/fragemnt_activity_chat_record"
 		    android:layout_width="match_parent"
     		android:layout_height="wrap_content" />
     </LinearLayout>

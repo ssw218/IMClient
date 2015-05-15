@@ -14,30 +14,27 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.util.Log;
 
-public class DataBaseHelper {
+public class DatabaseHelper {
 	private static final String TAG = "DataBaseHelper";
 	private static final boolean DEBUG = true;
 	private static final int VERSION = 4;
 	private static final String DATABASE_NAME = "im.db";
 
-//	private PathContext mContext;
-//	private String mId;
-//	private SDCardManager mSDCardManager;
+	private static DatabaseHelper mDatabaseHelper;
 	
-	public DataBaseHelper(Context context) {
-//		mId = id;
-//		mSDCardManager = new SDCardManager(id);
-		UserInfoHelper helper = new UserInfoHelper(context);
-		//helper.insert();
-		helper.select();
+	private UserInfoHelper mUserInfoHelper;
+	private MessageHelper mMessageHelper;
+
+	public synchronized static DatabaseHelper getInstance(Context context) {
+		if (mDatabaseHelper == null)
+			mDatabaseHelper = new DatabaseHelper(context);
+		return mDatabaseHelper;
 	}
 	
-//	private synchronized PathContext getContextInstance(Context context) {
-//		if (mContext == null) {
-//			mContext = new PathContext(context, mSDCardManager.getDatabaseParentPath());
-//		}
-//		return mContext;
-//	}
+	private DatabaseHelper(Context context) {
+		mUserInfoHelper = new UserInfoHelper(context);
+		mMessageHelper = new MessageHelper(context);
+	}
 	
 	public class UserInfoHelper extends SQLiteOpenHelper {
 		private static final String TAG = "UserInfoHelper";
@@ -151,9 +148,8 @@ public class DataBaseHelper {
 
 		private String id;
 
-		public MessageHelper(Context context, String name,
-				CursorFactory factory, int version) {
-			super(context, DATABASE_NAME, factory, version);
+		MessageHelper(Context context) {
+			super(context, DATABASE_NAME, null, VERSION);
 		}
 
 		@Override

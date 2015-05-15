@@ -15,28 +15,22 @@
         android:background="@drawable/welcome" />"
     
     <EditText
-        android:id="@+id/edittext_fragment_login_user"
+        android:id="@+id/edittext_activity_register_user"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="number"
-        android:hint="Please input your phone number" />
+        android:hint="Please input your username" />
     
     <EditText
-        android:id="@+id/edittext_fragment_login_password"
+        android:id="@+id/edittext_activity_register_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPassword"
-        android:hint="Please input your username" />
+        android:hint="Please input your phone number" />
+   
     
     <Button
-        android:id="@+id/button_fragment_login_login"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAllCaps="false"
-        android:text="LOGIN" />
-    
-    <Button
-        android:id="@+id/button_fragment_login_register"
+        android:id="@+id/button_activity_register_register"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAllCaps="false"

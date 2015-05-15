@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry exported="true" kind="lib" path="F:/Android/adt-bundle-windows-x86_64/adt-bundle-windows-x86_64-20140702/sdk/extras/android/support/v7/appcompat/libs/android-support-v7-appcompat.jar"/>
 	<classpathentry exported="true" kind="lib" path="F:/Android/adt-bundle-windows-x86_64/adt-bundle-windows-x86_64-20140702/sdk/extras/android/support/v7/recyclerview/libs/android-support-v7-recyclerview.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
@@ -7,6 +8,5 @@
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry exported="true" kind="lib" path="F:/Android/adt-bundle-windows-x86_64/adt-bundle-windows-x86_64-20140702/sdk/extras/android/support/v4/android-support-v4.jar"/>
-	<classpathentry kind="lib" path="F:/Android/adt-bundle-windows-x86_64/adt-bundle-windows-x86_64-20140702/sdk/extras/android/support/v7/appcompat/libs/android-support-v7-appcompat.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

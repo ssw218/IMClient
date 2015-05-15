@@ -2,7 +2,10 @@ package com.lyk.imclient.ui.adapter;
 
 import java.util.ArrayList;
 
+import com.lyk.imclient.R;
+
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -35,7 +38,7 @@ public class ChatMessageAdapter extends RecyclerView.Adapter<ChatMessageAdapter.
 
 	@Override
 	public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-		ViewHolder vh = new ViewHolder(new View(parent.getContext()));
-		return null;
+		ViewHolder vh = new ViewHolder(LayoutInflater.from((parent.getContext())).inflate(R.layout.chat_send_view, null));
+		return vh;
 	}
 }

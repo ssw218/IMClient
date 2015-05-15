@@ -1,15 +1,27 @@
 package com.lyk.imclient.activity;
 
+import java.util.ArrayList;
+
 import com.lyk.imclient.R;
+import com.lyk.imclient.ui.adapter.ChatMessageAdapter;
+import com.lyk.imclient.ui.adapter.ChatsAdapter;
 import com.lyk.imclient.ui.fragment.PanelFragment;
+import com.lyk.imclient.ui.fragment.RecordFragment;
+import com.lyk.imclient.ui.view.ChatSimpleView;
 import com.lyk.imclient.ui.view.ChatViewLayout;
+import com.lyk.imclient.util.RecordManager;
 import com.lyk.imclient.util.IPManager;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -22,6 +34,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.View.OnKeyListener;
+import android.view.View.OnTouchListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,13 +49,16 @@ public class ChatActivity extends Activity {
 	private static final boolean VIEW_DEBUG = true;
 	
 	private View mView;
+	private RecyclerView mChatView;
 	
 	private EditText mMessageText;
 	private ImageButton mVoiceButton;
 	private ImageButton mChangeButton;
 	private ImageButton mEmojiButton;
 
+	private Fragment mCurrentFragment;
 	private PanelFragment mPanelFragment;
+	private RecordFragment mRecordFragment;
 	
 	boolean isTyping;
 	
@@ -60,8 +76,8 @@ public class ChatActivity extends Activity {
 		@Override
 		public void onClick(View v) {
 			FragmentTransaction ft = getFragmentManager().beginTransaction();
-			if (!mPanelFragment.isHidden())
-				ft.hide(mPanelFragment);
+			if (!mCurrentFragment.isHidden())
+				ft.hide(mCurrentFragment);
 			ft.commit();
 		}
 		
@@ -87,13 +103,13 @@ public class ChatActivity extends Activity {
 			} else {
 				FragmentTransaction ft = getFragmentManager().beginTransaction();
 				InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-				if (mPanelFragment.isHidden()) {
+				if (mCurrentFragment.isHidden()) {
 					imm.hideSoftInputFromWindow(mMessageText.getWindowToken(), 0);
-					ft.show(mPanelFragment);
+					ft.show(mCurrentFragment);
 					ft.commit();
 				}
 				else {
-					ft.hide(mPanelFragment);
+					ft.hide(mCurrentFragment);
 					ft.commit();
 					imm.showSoftInput(mMessageText, InputMethodManager.SHOW_FORCED);
 				}
@@ -145,6 +161,10 @@ public class ChatActivity extends Activity {
 		init();
 	}
 	
+	private RecyclerView.Adapter mAdapter;
+	private RecyclerView.LayoutManager mLayoutManager;
+	private ArrayList<View> mList;
+	
 	private void init() {
 		Toolbar toolbar = (Toolbar) mView.findViewById(R.id.chat_back);
 		setActionBar(toolbar);
@@ -157,16 +177,64 @@ public class ChatActivity extends Activity {
 		mVoiceButton = (ImageButton) mView.findViewById(R.id.imagebutton_activity_chat_voice);
 		mChangeButton = (ImageButton) mView.findViewById(R.id.imagebutton_activity_chat_change);
 		mEmojiButton = (ImageButton) mView.findViewById(R.id.imagebutton_activity_chat_emoji);
+		mChatView = (RecyclerView) mView.findViewById(R.id.recyclerview_activity_chat_chat);
 		
 		mMessageText.setOnClickListener(mEditTextListener);
 		mMessageText.addTextChangedListener(mTextChangeListener);
 		mChangeButton.setOnClickListener(mPanelListener);
 		mView.setOnClickListener(mLayoutListener);
+		mVoiceButton.setOnClickListener(mVoiceListener);
 		
 		FragmentManager fragmentManager = getFragmentManager();
 		mPanelFragment = (PanelFragment) fragmentManager.findFragmentById(R.id.fragemnt_activity_chat_panel);
+		mRecordFragment = (RecordFragment) fragmentManager.findFragmentById(R.id.fragemnt_activity_chat_record);
+		mCurrentFragment = mPanelFragment;
+		
+		FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+		fragmentTransaction.hide(mRecordFragment);
+		fragmentTransaction.commit();
+		
+		mChatView.setHasFixedSize(true);
+	    mLayoutManager = new LinearLayoutManager(this);
+	    mChatView.setLayoutManager(mLayoutManager);
+	    
+	    View sendview = LayoutInflater.from(this).inflate(R.layout.chat_send_view, null);
+	    View receiveview = LayoutInflater.from(this).inflate(R.layout.chat_receive_view, null);
+	    mList = new ArrayList<View>();
+	    mList.add(sendview);
+	    mList.add(receiveview);
+	    mAdapter = new ChatMessageAdapter(mList);
+	    mChatView.setAdapter(mAdapter);
+	    
+	    mRecordManager = new RecordManager();
+	    
 	}
+	
+	private RecordManager mRecordManager;
+	
+	private OnClickListener mVoiceListener = new OnClickListener() {
 
+		@Override
+		public void onClick(View v) {
+			InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+			FragmentManager fragmentManager = getFragmentManager();
+			FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+			fragmentTransaction.hide(mCurrentFragment);
+			if (mCurrentFragment == mPanelFragment) {
+				mCurrentFragment = mRecordFragment;
+				fragmentTransaction.show(mCurrentFragment);
+				imm.hideSoftInputFromWindow(mMessageText.getWindowToken(), 0);
+				mVoiceButton.setBackgroundResource(R.drawable.ic_keyboard);
+			} else if (mCurrentFragment == mRecordFragment) {
+				mCurrentFragment = mPanelFragment;
+				imm.showSoftInput(mMessageText, InputMethodManager.SHOW_FORCED);
+				mVoiceButton.setBackgroundResource(R.drawable.ic_mic);
+			}
+			fragmentTransaction.commit();
+		}
+		
+	};
+	
 	@Override
 	public void onBackPressed() {
 		if (!mPanelFragment.isHidden()) {
@@ -186,6 +254,39 @@ public class ChatActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	class TimeThread extends Thread {
+		private long mStartTime;
+		
+		public TimeThread(long startTime) {
+			super();
+			mStartTime = startTime;
+		}
 
+		@Override
+		public void run() {
+			while (true) {
+				if (System.currentTimeMillis() - mStartTime > 60000) {
+					// send voice
+					
+					break;
+				}
+			}
+		}
+		
+	}
 
+	class ActivityHandler extends Handler {
+
+		@Override
+		public void handleMessage(Message msg) {
+			switch(msg.what) {
+			
+			}
+		
+		}
+		
+	}
+	
+	
 }
