@@ -50,6 +50,7 @@ public class ChatActivity extends Activity {
 	
 	private View mView;
 	private RecyclerView mChatView;
+	private Context mContext;
 	
 	private EditText mMessageText;
 	private ImageButton mVoiceButton;
@@ -99,6 +100,11 @@ public class ChatActivity extends Activity {
 		@Override
 		public void onClick(View v) {
 			if (isTyping) {
+				// ChatService do something
+				// View
+				View chatView = LayoutInflater.from(mContext).inflate(R.layout.chat_send_view, null);
+				mList.add(chatView);
+				mAdapter.notifyItemInserted(mList.size());
 				
 			} else {
 				FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -151,13 +157,20 @@ public class ChatActivity extends Activity {
 		}
 		
 	};
+	
+	private String mId;
+	private String mName;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		mContext = this;
 		mView = LayoutInflater.from(this).inflate(R.layout.activity_chat, null);
 		setContentView(mView);
-
+		
+		mId = getIntent().getStringExtra("id");
+		mName = getIntent().getStringExtra("name");
+				
 		init();
 	}
 	
@@ -171,7 +184,7 @@ public class ChatActivity extends Activity {
 		getActionBar().setHomeButtonEnabled(true);
 		getActionBar().setDisplayShowHomeEnabled(true);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
-		getActionBar().setTitle("Mao");
+		getActionBar().setTitle(mName);
 
 		mMessageText = (EditText) mView.findViewById(R.id.edittext_activity_chat_send);
 		mVoiceButton = (ImageButton) mView.findViewById(R.id.imagebutton_activity_chat_voice);

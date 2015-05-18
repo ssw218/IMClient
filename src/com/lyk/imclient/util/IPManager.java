@@ -9,6 +9,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
 
+import android.content.Context;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -21,19 +24,42 @@ public class IPManager {
 	
 	private String mNetworkIP;
 	
+	private Context mContext;
+	
 	public IPManager() {
 		
 	}
 	
+	public IPManager(Context context) {
+		mContext = context;
+	}
+	
 	public String getHostIP() {
 		String ip = null;
-		try {
-			ip = InetAddress.getLocalHost().getHostAddress();
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
+		WifiManager wifiManager = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
+		if (!wifiManager.isWifiEnabled()) {
+			wifiManager.setWifiEnabled(true);
 		}
+
+		WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+		int ipAddress = wifiInfo.getIpAddress();
+		ip = intToInetAddress(ipAddress).getHostAddress();
+		Log.e(" ip ", ip);
 		return ip;
 	}
+	
+	 private InetAddress intToInetAddress(int hostAddress) {
+	        byte[] addressBytes = { (byte)(0xff & hostAddress),
+	                                (byte)(0xff & (hostAddress >> 8)),
+	                                (byte)(0xff & (hostAddress >> 16)),
+	                                (byte)(0xff & (hostAddress >> 24)) };
+
+	        try {
+	           return InetAddress.getByAddress(addressBytes);
+	        } catch (UnknownHostException e) {
+	           throw new AssertionError();
+	        }
+	    }
 	
 	public void initNetwork() {
 		if (NET) { 

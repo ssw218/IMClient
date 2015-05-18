@@ -48,14 +48,14 @@ public class LoginFragment extends Fragment {
 	private static final boolean DEBUG = true;
 	
 	private View mView;
-	private EditText mId;
+	private EditText mPhone;
 	private EditText mPassword;
 	private Button mLoginButton;
 	private Button mRegisterButton;
 	private LoginAsyncTask mLoginTask;
 	
 	String ip;
-	IPManager ipManager = new IPManager();
+	IPManager ipManager;
 	
 	private OnClickListener mLoginListener = new OnClickListener() {
 
@@ -66,9 +66,11 @@ public class LoginFragment extends Fragment {
 				mLoginTask = new LoginAsyncTask();
 				if (DEBUG) Log.e(TAG, "on login listener");
 				HostUserBean user = new HostUserBean();
-				user.setId(mId.getText().toString());
+				user.setPhone(mPhone.getText().toString());
 				user.setPassword(mPassword.getText().toString());
-				user.setIp(ipManager.getNetworkIP());
+				if (ipManager == null)
+					ipManager = new IPManager(getActivity());
+				user.setIp(ipManager.getHostIP());
 				mLoginTask.execute(user);
 			}
 		}
@@ -97,7 +99,6 @@ public class LoginFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		ipManager.initNetwork();
 	}
 
 	@Override
@@ -109,7 +110,7 @@ public class LoginFragment extends Fragment {
 		mRegisterButton = (Button) mView.findViewById(R.id.button_fragment_login_register);
 		mLoginButton.setOnClickListener(mLoginListener);
 		mRegisterButton.setOnClickListener(mRegisterListener);
-		mId = (EditText) mView.findViewById(R.id.edittext_fragment_login_user);
+		mPhone = (EditText) mView.findViewById(R.id.edittext_fragment_login_user);
 		mPassword = (EditText) mView.findViewById(R.id.edittext_fragment_login_password);
 		return mView;
 	}
@@ -127,7 +128,7 @@ public class LoginFragment extends Fragment {
 			
 			if (DEBUG) Log.v(TAG, params[0].toString());
 			
-			s.append("id=" + params[0].getId());
+			s.append("phone=" + params[0].getPhone());
 			s.append("&password=" + params[0].getPassword());
 			s.append("&ip=" + params[0].getIp());
 			

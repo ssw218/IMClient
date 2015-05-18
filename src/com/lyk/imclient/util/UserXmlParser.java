@@ -19,6 +19,7 @@ public class UserXmlParser {
 	private static final String TAG = "UserXmlParser";
 	private static final boolean DEBUG = false;
 
+	private static final String TAG_ID = "id";
 	private static final String TAG_NAME = "name";
 	private static final String TAG_PHOTO = "photo";
 	private static final String TAG_FRIENDS = "friends";
@@ -55,6 +56,8 @@ public class UserXmlParser {
 						user.setGroups(parser.getText());
 					} else if (name.equals(TAG_INTRODUCE)) {
 						user.setIntroduce(parser.getText());
+					} else if (name.equals(TAG_ID)) {
+						user.setId(parser.getText());
 					}
 				}
 				eventType = parser.next();

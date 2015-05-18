@@ -12,7 +12,6 @@ import com.lyk.imclient.ui.fragment.CirclesFragment;
 import com.lyk.imclient.ui.fragment.ContactsFragment;
 import com.lyk.imclient.ui.fragment.LoginFragment;
 import com.lyk.imclient.ui.tab.SlidingTabLayout;
-import com.lyk.imclient.util.IPManager;
 import com.lyk.imclient.util.SDCardManager;
 
 import android.content.ComponentName;

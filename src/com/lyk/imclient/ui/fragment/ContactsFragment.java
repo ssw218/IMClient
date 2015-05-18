@@ -3,11 +3,13 @@ package com.lyk.imclient.ui.fragment;
 import java.util.ArrayList;
 
 import com.lyk.imclient.R;
+import com.lyk.imclient.activity.ChatActivity;
 import com.lyk.imclient.bean.FriendUserBean;
 import com.lyk.imclient.util.IPManager;
 import com.lyk.imclient.util.SDCardManager;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
@@ -132,11 +134,25 @@ public class ContactsFragment extends Fragment {
 		private TextView mName;
 		private TextView mIntroduce;
 
+		private OnClickListener mClickListener = new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(getActivity(), ChatActivity.class);
+				//Bundle bundle = new Bundle();
+				intent.putExtra("id", mId);
+				intent.putExtra("name", mName.getText().toString());
+				getActivity().startActivity(intent);
+			}
+			
+		};
+		
 		public ContactView(Context context, String id) {
 			super(context);
 			mId = id;
 			mView = LayoutInflater.from(context).inflate(
 					R.layout.contact_people_view, null);
+			mView.setOnClickListener(mClickListener);
 			mPhoto = (ImageView) mView.findViewById(R.id.imageview_contact_people_view_photo);
 			mName = (TextView) mView
 					.findViewById(R.id.textview_contact_people_view_name);
