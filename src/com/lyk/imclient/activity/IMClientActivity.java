@@ -52,6 +52,12 @@ public class IMClientActivity extends FragmentActivity {
 	
 	private UIHandler mUIHandler;
 	
+	private String mHostId;
+	
+	public String getHostId() {
+		return mHostId;
+	}
+	
 	private OnClickListener mNavigationListener = new OnClickListener() {
 
 		@Override
@@ -61,7 +67,6 @@ public class IMClientActivity extends FragmentActivity {
 		
 	};
 
-	private IBinder mServiceBinder;
 	private Messenger mMessenger;
 	
 	private ServiceConnection mConnection = new ServiceConnection() {
@@ -200,7 +205,8 @@ public class IMClientActivity extends FragmentActivity {
 				case MESSAGE_CONTACTS_SERVICE_START : {
 					Intent intent = new Intent(IMClientActivity.this, ContactsService.class);
 					UserBean user = (UserBean) msg.obj;
-			
+					mHostId = user.getId();
+					
 					intent.putExtra(ContactsService.NAME_ID, user.getId());
 					intent.putExtra(ContactsService.NAME_PHOTO, user.getImageURL());
 					intent.putExtra(ContactsService.NAME_FRIENDS, user.getFriends());
@@ -227,6 +233,7 @@ public class IMClientActivity extends FragmentActivity {
 					break; }
 				case MESSAGE_CHATS_SERVICE_START : {
 					Intent intent = new Intent(IMClientActivity.this, ChatsService.class);
+					intent.putExtra("id", mHostId);
 					startService(intent);
 					break; }
 				case MESSAGE_USER_PHOTO_UPDATE : {

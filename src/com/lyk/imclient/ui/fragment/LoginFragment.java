@@ -45,7 +45,7 @@ import android.widget.Toast;
 
 public class LoginFragment extends Fragment {
 	private static final String TAG = "LoginFragment";
-	private static final boolean DEBUG = true;
+	private static final boolean DEBUG = false;
 	
 	private View mView;
 	private EditText mPhone;
@@ -117,12 +117,13 @@ public class LoginFragment extends Fragment {
 	
 	class LoginAsyncTask extends AsyncTask<HostUserBean, Void, Boolean> {
 		private static final String TAG = "LoginAsyncTask";
-		private static final boolean DEBUG = true;
+		private static final boolean DEBUG = false;
 		private static final int TIME_OUT_MILLIS = 20000;
 		
 		@Override
 		protected Boolean doInBackground(HostUserBean... params) {
 			StringBuilder s = new StringBuilder("http://" + ServerManager.SERVER_IP + 
+					":" + ServerManager.HTTP_PORT +
 					"/" + ServerManager.SERVER_NAME +
 					"/" + ServerManager.SERVLET_LOGIN + "?");
 			
@@ -146,7 +147,7 @@ public class LoginFragment extends Fragment {
 //				BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream));
 				inputStream = conn.getInputStream();
 				reader = new BufferedReader(new InputStreamReader(inputStream));
-				Log.v(TAG, "response code : " + conn.getResponseCode() +
+				if (DEBUG) Log.v(TAG, "response code : " + conn.getResponseCode() +
 						" response message : " + conn.getResponseMessage());
 				String result = null;
 				StringBuffer xml = new StringBuffer();
@@ -163,7 +164,7 @@ public class LoginFragment extends Fragment {
 					message.what = IMClientActivity.UIHandler.MESSAGE_CONTACTS_SERVICE_START;
 					// xml parse
 					UserBean user = UserXmlParser.getUser(xml.toString());
-					user.setId(params[0].getId());
+//					user.setId(params[0].getId());
 					if (DEBUG) Log.e(TAG, "user info : " + user);
 					message.obj = user;
 					((IMClientActivity) getActivity()).getUIHandler().sendMessage(message);
@@ -195,7 +196,7 @@ public class LoginFragment extends Fragment {
 		@Override
 		protected void onPostExecute(Boolean result) {
 			super.onPostExecute(result);
-			Log.e(TAG, "result: " + result);
+			if (DEBUG) Log.e(TAG, "result: " + result);
 			if (result) {
 				IMClientActivity activity = (IMClientActivity) getActivity();
 				activity.hideLoginFragment(getFragment());

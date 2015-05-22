@@ -21,20 +21,20 @@
             android:background="@drawable/ic_mic_grey600_48dp" />
 
         <TextView
-            android:id="@+id/textView1"
+            android:id="@+id/textview_fragment_record_point"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/imagebutton_fragment_record_button"
             android:layout_centerHorizontal="true"
-            android:text="手指上划，取消发送" />
+            android:text="按住话筒，开始录音" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/textView_fragment_record_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/imagebutton_fragment_record_button"
             android:layout_toRightOf="@+id/imagebutton_fragment_record_button"
-            android:text="11&apos;&apos;" />
+            android:text="" />
     </RelativeLayout>
 
 </FrameLayout>

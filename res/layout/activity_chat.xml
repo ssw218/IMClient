@@ -10,14 +10,8 @@
         android:layout_alignParentTop="true"
         android:background="#aaa" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerview_activity_chat_chat"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/chat_back"
-        android:scrollbars="horizontal" />
-
     <LinearLayout
+        android:id="@+id/linearlayout_activity_chat_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -27,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:background="#22AAAAAA" >
+            android:background="#FFE5E5E5" >
 
             <ImageButton
                 android:id="@+id/imagebutton_activity_chat_voice"
@@ -69,5 +63,13 @@
 		    android:layout_width="match_parent"
     		android:layout_height="wrap_content" />
     </LinearLayout>
+    
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview_activity_chat_chat"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/chat_back"
+        android:layout_above="@id/linearlayout_activity_chat_layout"
+        android:scrollbars="vertical" />"
 
 </RelativeLayout>

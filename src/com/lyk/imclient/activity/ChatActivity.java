@@ -3,20 +3,28 @@ package com.lyk.imclient.activity;
 import java.util.ArrayList;
 
 import com.lyk.imclient.R;
+import com.lyk.imclient.bean.MessageBean;
+import com.lyk.imclient.receiver.ReceiveReceiver;
+import com.lyk.imclient.receiver.ReceiveReceiver.OnMessageReceiveListener;
+import com.lyk.imclient.receiver.SendReceiver;
 import com.lyk.imclient.ui.adapter.ChatMessageAdapter;
-import com.lyk.imclient.ui.adapter.ChatsAdapter;
 import com.lyk.imclient.ui.fragment.PanelFragment;
 import com.lyk.imclient.ui.fragment.RecordFragment;
-import com.lyk.imclient.ui.view.ChatSimpleView;
-import com.lyk.imclient.ui.view.ChatViewLayout;
+import com.lyk.imclient.ui.view.BubbleReceiveView;
+import com.lyk.imclient.ui.view.BubbleSendView;
+import com.lyk.imclient.ui.view.ImageSendView;
+import com.lyk.imclient.util.PlayManager;
 import com.lyk.imclient.util.RecordManager;
-import com.lyk.imclient.util.IPManager;
+import com.lyk.imclient.util.SDCardManager;
 
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -25,28 +33,19 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnFocusChangeListener;
-import android.view.View.OnKeyListener;
-import android.view.View.OnTouchListener;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toolbar;
 
 public class ChatActivity extends Activity {
 	private static final String TAG = "ChatActivity";
 	private static final boolean DEBUG = true;
-	private static final boolean VIEW_DEBUG = true;
+	private static final boolean VIEW_DEBUG = false;
 	
 	private View mView;
 	private RecyclerView mChatView;
@@ -61,16 +60,10 @@ public class ChatActivity extends Activity {
 	private PanelFragment mPanelFragment;
 	private RecordFragment mRecordFragment;
 	
-	boolean isTyping;
+	private ActivityHandler mHandler;
+	private ReceiveReceiver mReceiver;
 	
-	private OnClickListener sendlistener = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-//			mChatViewLayout.sendMessage(mMessageText.getText().toString());
-//			mMessageText.setText("");
-		}
-
-	};
+	boolean isTyping;
 	
 	private OnClickListener mEditTextListener = new OnClickListener() {
 
@@ -102,9 +95,9 @@ public class ChatActivity extends Activity {
 			if (isTyping) {
 				// ChatService do something
 				// View
-				View chatView = LayoutInflater.from(mContext).inflate(R.layout.chat_send_view, null);
-				mList.add(chatView);
-				mAdapter.notifyItemInserted(mList.size());
+				Message message = new Message();
+				message.what = ActivityHandler.MESSAGE_SEND_TEXT;
+				mHandler.sendMessage(message);
 				
 			} else {
 				FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -158,7 +151,8 @@ public class ChatActivity extends Activity {
 		
 	};
 	
-	private String mId;
+	private String mFriendId;
+	private String mHostId;
 	private String mName;
 
 	@Override
@@ -168,7 +162,8 @@ public class ChatActivity extends Activity {
 		mView = LayoutInflater.from(this).inflate(R.layout.activity_chat, null);
 		setContentView(mView);
 		
-		mId = getIntent().getStringExtra("id");
+		mFriendId = getIntent().getStringExtra("friend_id");
+		mHostId = getIntent().getStringExtra("host_id");
 		mName = getIntent().getStringExtra("name");
 				
 		init();
@@ -211,19 +206,36 @@ public class ChatActivity extends Activity {
 	    mLayoutManager = new LinearLayoutManager(this);
 	    mChatView.setLayoutManager(mLayoutManager);
 	    
-	    View sendview = LayoutInflater.from(this).inflate(R.layout.chat_send_view, null);
-	    View receiveview = LayoutInflater.from(this).inflate(R.layout.chat_receive_view, null);
 	    mList = new ArrayList<View>();
-	    mList.add(sendview);
-	    mList.add(receiveview);
 	    mAdapter = new ChatMessageAdapter(mList);
 	    mChatView.setAdapter(mAdapter);
 	    
 	    mRecordManager = new RecordManager();
+	    mPlayManager = new PlayManager();
+	    
+	    mHandler = new ActivityHandler();
+	    mReceiver = new ReceiveReceiver();
+	    
+	    mReceiver.setOnMessageReceiveListener(new OnMessageReceiveListener() {
+
+			@Override
+			public void onMessageReceive(byte[] data) {
+				Message message = new Message();
+				message.what = ActivityHandler.MESSAGE_RECEIVE_TEXT;
+				message.obj = MessageBean.createMessage(data);
+				mHandler.sendMessage(message);
+			}
+	    	
+	    });
+	    
+	    IntentFilter filter = new IntentFilter();
+	    filter.addAction(ReceiveReceiver.ACTION);
+	    registerReceiver(mReceiver, filter);
 	    
 	}
 	
 	private RecordManager mRecordManager;
+	private PlayManager mPlayManager;
 	
 	private OnClickListener mVoiceListener = new OnClickListener() {
 
@@ -247,7 +259,13 @@ public class ChatActivity extends Activity {
 		}
 		
 	};
-	
+
+	@Override
+	protected void onDestroy() {
+		unregisterReceiver(mReceiver);
+		super.onDestroy();
+	}
+
 	@Override
 	public void onBackPressed() {
 		if (!mPanelFragment.isHidden()) {
@@ -268,37 +286,96 @@ public class ChatActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	class TimeThread extends Thread {
-		private long mStartTime;
-		
-		public TimeThread(long startTime) {
-			super();
-			mStartTime = startTime;
-		}
-
-		@Override
-		public void run() {
-			while (true) {
-				if (System.currentTimeMillis() - mStartTime > 60000) {
-					// send voice
-					
-					break;
-				}
-			}
-		}
-		
+	public Handler getHandler() {
+		return mHandler;
 	}
 
-	class ActivityHandler extends Handler {
+	public class ActivityHandler extends Handler {
+		public static final int MESSAGE_SEND_TEXT = 0;
+		public static final int MESSAGE_SEND_VOICE = 1;
+		public static final int MESSAGE_SEND_IMAGE = 2;
+		public static final int MESSAGE_RECEIVE_TEXT = 3;
+		public static final int MESSAGE_RECEIVE_VOICE = 4;
+		public static final int MESSAGE_RECEIVE_IMAGE = 5;
 
 		@Override
 		public void handleMessage(Message msg) {
+			if (DEBUG) Log.e(TAG, "Message " + msg.what);
 			switch(msg.what) {
-			
+			case MESSAGE_SEND_TEXT : {
+				BubbleSendView sendView = new BubbleSendView(mContext);
+				sendView.setSendMessage(mMessageText.getText().toString());
+				sendView.setRecordTime(null);
+				SDCardManager manager = new SDCardManager();
+				Bitmap bitmap = manager.getBitmap(SDCardManager.FILE_PHOTO, mHostId + ".png");
+				sendView.setHostPhoto(bitmap)
+				sendView.setType(MessageType.MESSAGE_TEXT);
+				mList.add(sendView);
+				mAdapter.notifyItemInserted(mList.size());
+				
+				// send message to server
+				MessageBean messageBean = MessageBean.createTextMessage(mHostId, mFriendId, mMessageText.getText().toString());
+				Intent intent = new Intent(SendReceiver.ACTION);
+				intent.putExtra("data", messageBean.getByteArray());
+				sendBroadcast(intent);
+				
+				mMessageText.setText("");
+				
+			} break;
+			case MESSAGE_SEND_VOICE : {
+				if (DEBUG) Log.e(TAG, "MESSAGE_SEND_VOICE");
+				String path = (String) msg.obj;
+				BubbleSendView sendView = new BubbleSendView(mContext);
+				sendView.setRecordPath(path);
+				sendView.setType(MessageType.MESSAGE_MEDIA);
+				sendView.setSendMessage("record");
+				mPlayManager.prepare(path);
+				sendView.setRecordTime("");
+				SDCardManager manager = new SDCardManager();
+				Bitmap bitmap = manager.getBitmap(SDCardManager.FILE_PHOTO, mHostId + ".png");
+				sendView.setHostPhoto(bitmap);
+//				if (DEBUG) Log.e(TAG, "width : " + sendView.getTextWidth());
+				mList.add(sendView);
+				mAdapter.notifyItemInserted(mList.size());
+				// send message to server
+				
+			} break;
+			case MESSAGE_SEND_IMAGE : {
+				Bitmap bitmap = (Bitmap) msg.obj;
+				ImageSendView sendView = new ImageSendView(mContext);
+				sendView.setSendImage(bitmap);
+				SDCardManager manager = new SDCardManager();
+				Bitmap bitmap2 = manager.getBitmap(SDCardManager.FILE_PHOTO, mHostId + ".png");
+				sendView.setHostPhoto(bitmap2);
+				mList.add(sendView);
+				mAdapter.notifyItemInserted(mList.size());
+				// send message to server
+			} break;
+			case MESSAGE_RECEIVE_TEXT : {
+				MessageBean messageBean = (MessageBean) msg.obj;
+				BubbleReceiveView receiveView = new BubbleReceiveView(mContext);
+				receiveView.setReceiveMessage(messageBean.getMessageText());
+				receiveView.setRecordTime(null);
+				SDCardManager manager = new SDCardManager();
+				Bitmap bitmap = manager.getBitmap(SDCardManager.FILE_PHOTO, messageBean.getSendId() + ".png");
+				receiveView.setFriendPhoto(bitmap);
+				mList.add(receiveView);
+				mAdapter.notifyItemInserted(mList.size());
+			} break;
+			case MESSAGE_RECEIVE_VOICE :
+			case MESSAGE_RECEIVE_IMAGE : 
 			}
 		
 		}
 		
+	}
+	
+	public class MessageType {
+		private MessageType() {
+		}
+		
+		public static final int MESSAGE_TEXT = 0;
+		public static final int MESSAGE_MEDIA = 1;
 	}
 	
 	

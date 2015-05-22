@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.lyk.imclient.R;
 import com.lyk.imclient.activity.ChatActivity;
+import com.lyk.imclient.activity.IMClientActivity;
 import com.lyk.imclient.bean.FriendUserBean;
 import com.lyk.imclient.util.IPManager;
 import com.lyk.imclient.util.SDCardManager;
@@ -31,7 +32,7 @@ import android.widget.TextView;
 
 public class ContactsFragment extends Fragment {
 	private static final String TAG = "ContactsFragment";
-	private static final boolean DEBUG = true;
+	private static final boolean DEBUG = false;
 
 	private LinearLayout mFriendsLayout;
 	private LinearLayout mGroupsLayout;
@@ -66,7 +67,7 @@ public class ContactsFragment extends Fragment {
 
 	public class FragmentHandler extends Handler {
 		private static final String TAG = "FragmentHandler";
-		private static final boolean DEBUG = true;
+		private static final boolean DEBUG = false;
 		
 		public static final int MESSAGE_ADD_FRIEND = 1;
 		public static final int MESSAGE_DELETE_FRIEND = 2;
@@ -140,7 +141,8 @@ public class ContactsFragment extends Fragment {
 			public void onClick(View v) {
 				Intent intent = new Intent(getActivity(), ChatActivity.class);
 				//Bundle bundle = new Bundle();
-				intent.putExtra("id", mId);
+				intent.putExtra("host_id", ((IMClientActivity) getActivity()).getHostId());
+				intent.putExtra("friend_id", mId);
 				intent.putExtra("name", mName.getText().toString());
 				getActivity().startActivity(intent);
 			}

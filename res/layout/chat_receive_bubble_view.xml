@@ -20,14 +20,14 @@
         android:background="#aaa" >
 
         <TextView
-            android:id="@+id/textview_chat_send_bubble_view_content"
+            android:id="@+id/textview_chat_receive_bubble_view_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="猫咪真可爱"
             android:textSize="14sp" />
         
         <TextView
-            android:id="@+id/textview_chat_send_bubble_view_time"
+            android:id="@+id/textview_chat_receive_bubble_view_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"

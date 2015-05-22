@@ -26,7 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPassword"
-        android:hint="Please input your username" />
+        android:hint="Please input your password" />
     
     <Button
         android:id="@+id/button_fragment_login_login"

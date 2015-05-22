@@ -87,6 +87,7 @@ public class PanelFragment extends Fragment {
 				if (mImageDialog == null)
 					mImageDialog = new ImageDialog(getActivity());
 				mImageDialog.setImageBitmap(bitmap);
+				mImageDialog.setImagePath(picture_path);
 				mImageDialog.show();
 			}
 		}

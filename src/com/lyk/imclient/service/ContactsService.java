@@ -208,7 +208,7 @@ public class ContactsService extends Service {
 
 	class FriendInfoUpdateTask extends AsyncTask<String, Void, FriendUserBean> {
 		private static final String TAG = "FriendInfoUpdateTask";
-		private static final boolean DEBUG = true;
+		private static final boolean DEBUG = false;
 		private static final int TIME_OUT_MILLIS = 20000;
 		
 		@Override
@@ -216,7 +216,7 @@ public class ContactsService extends Service {
 			String id = params[0];
 			FriendUserBean friend = null;
 			String string = new String("http://"
-					+ ServerManager.SERVER_IP + "/" + ServerManager.SERVER_NAME
+					+ ServerManager.SERVER_IP + ":" + ServerManager.HTTP_PORT + "/" + ServerManager.SERVER_NAME
 					+ "/" + ServerManager.SERVLET_FRIEND_INFO + "?id=" + id);
 			URL url = null;
 			HttpURLConnection conn = null;
@@ -235,7 +235,7 @@ public class ContactsService extends Service {
 				friend = UserXmlParser.getUser(xml.toString());
 				friend.setId(id);
 				friend.setImagePath(friend.getImageURL());
-				Log.v(TAG, "friend info : " + friend);
+				if (DEBUG) Log.v(TAG, "friend info : " + friend);
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -308,7 +308,7 @@ public class ContactsService extends Service {
 	
 	class ImageDownloadTask extends AsyncTask<String, Void, String[]> {
 		private static final String TAG = "ImageDownloadTask";
-		private static final boolean DEBUG = true;
+		private static final boolean DEBUG = false;
 		private static final int TIME_OUT_MILLIS = 20000;
 
 		@Override
@@ -318,7 +318,7 @@ public class ContactsService extends Service {
 			String id = params[0];
 			String name = params[1];
 			StringBuilder stringBuilder = new StringBuilder("http://"
-					+ ServerManager.SERVER_IP + "/" + ServerManager.SERVER_NAME
+					+ ServerManager.SERVER_IP + ":" + ServerManager.HTTP_PORT + "/" + ServerManager.SERVER_NAME
 					+ "/" + ServerManager.SERVLET_INFO_UPDATE + "?");
 			stringBuilder.append("photo=" + name);
 			URL url;
